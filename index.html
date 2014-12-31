@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>Kiva Clone</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <!--link rel="stylesheet" href="/stylesheets/style.css"-->
+    <link rel="stylesheet" href="style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+    <script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.min.js"></script>
+    <!--script src="/javascripts/angularApp.js"></script-->
+    <script src="angularApp.js"></script>
+  </head>
+  <body ng-app="kiva" >
+   
+        <div ng-controller="MainCtrl">
+           <div ng-repeat="item in list">
+            <p> {{item}} </p>
+            </div>
+        </div>
+
+  </body>
+</html>  
