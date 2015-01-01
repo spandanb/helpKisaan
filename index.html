@@ -10,10 +10,22 @@
     <script src="angularApp.js"></script>
   </head>
   <body ng-app="kiva" >
-   
+ 
         <div ng-controller="MainCtrl">
-           <div ng-repeat="item in list">
-            <p> {{item}} </p>
+           <div>Add New Project </div>
+            <form ng-submit="addProject()">
+                <input type="text" placeholder="Project Name" ng-model=name></input>
+                <input type="text" placeholder="Owner Name" ng-model=owner></input>
+                <input type="text" placeholder="goal" ng-model=goal></input>
+                <button type="submit">Create</button>
+            </form>
+           <div ng-repeat="proj in proj_list">
+            <h3> {{proj.name}} </h3>
+                <div>Owner: {{proj.owner}} </div>
+                <div>Goal: ${{proj.goal}} </div>
+                <div>Supporters: 
+                    <span ng-repeat="supporter in proj.supporters">{{supporter}}; </span>
+                </div>    
             </div>
         </div>
 
