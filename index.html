@@ -14,6 +14,8 @@
 
         <ui-view></ui-view>
 
+
+
         <script type="text/ng-template" id="/home.html">
             <div> 
                <div>Add New Project </div>
@@ -23,16 +25,34 @@
                     <input type="text" placeholder="goal" ng-model=goal></input>
                     <button type="submit">Create</button>
                 </form>
-               <div ng-repeat="proj in projects">
-                <h3> {{proj.name}} </h3>
+                <div ng-repeat="proj in projects">
+                    <h3>
+                        <a href="#/projects/{{$index}}">{{proj.name}}</a>
+                    </h3>
                     <div>Owner: {{proj.owner}} </div>
                     <div>Goal: ${{proj.goal}} </div>
                     <div>Supporters: 
-                        <span ng-repeat="supporter in proj.supporters">{{supporter}}; </span>
+                        <div ng-repeat="supporter in proj.supporters">{{supporter.userName}}; </div>
                     </div>    
                 </div>
             </div>
         </script>
+
+        <script type="text/ng-template" id="/projects.html">
+            <h3>{{project.name}}</h3>
+            <div>
+                {{project.owner}}
+            </div>
+            <div>
+                ${{project.goal}}
+            </div>
+            <div ng-repeat="supporter in supporters">
+                <div>{{supporter}}</div>
+            </div>
+        </script>
+
+
+
 
   </body>
 </html>  

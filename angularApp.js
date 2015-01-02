@@ -8,6 +8,11 @@ function($stateProvider, $urlRouterProvider){
         url:'/home', 
         templateUrl:'/home.html',
         controller:'MainCtrl'
+    })
+    .state('projects',{
+        url: '/projects/{id}',
+        templateUrl:'/projects.html',
+        controller: 'ProjectCtrl',
     });
 
     $urlRouterProvider.otherwise('home');
@@ -30,13 +35,24 @@ function($scope, projects){
 
     $scope.addProject = function(){
         $scope.projects.push({
-            'name':$scope.name,
-            'owner':$scope.owner,
-            'goal':$scope.goal,
+            name:$scope.name,
+            owner:$scope.owner,
+            goal:$scope.goal,
+            supporters:[
+                {userName:'bobr'},
+                {userName:'freddy'},
+            ]
         });
         $scope.owner = null;
         $scope.name = null;
         $scope.goal = null;
     }
 
+}])
+.controller('ProjectCtrl',[
+'$scope',
+'$stateParams',
+'projects',
+function($scope, $stateParams, projects){
+   $scope.project = projects.projects[$stateParams.id];
 }]);
