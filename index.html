@@ -19,7 +19,7 @@
                 <input type="text" placeholder="goal" ng-model=goal></input>
                 <button type="submit">Create</button>
             </form>
-           <div ng-repeat="proj in proj_list">
+           <div ng-repeat="proj in projects">
             <h3> {{proj.name}} </h3>
                 <div>Owner: {{proj.owner}} </div>
                 <div>Goal: ${{proj.goal}} </div>
