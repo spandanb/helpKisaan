@@ -10,24 +10,29 @@
     <script src="angularApp.js"></script>
   </head>
   <body ng-app="kiva" >
- 
-        <div ng-controller="MainCtrl">
-           <div>Add New Project </div>
-            <form ng-submit="addProject()">
-                <input type="text" placeholder="Project Name" ng-model=name></input>
-                <input type="text" placeholder="Owner Name" ng-model=owner></input>
-                <input type="text" placeholder="goal" ng-model=goal></input>
-                <button type="submit">Create</button>
-            </form>
-           <div ng-repeat="proj in projects">
-            <h3> {{proj.name}} </h3>
-                <div>Owner: {{proj.owner}} </div>
-                <div>Goal: ${{proj.goal}} </div>
-                <div>Supporters: 
-                    <span ng-repeat="supporter in proj.supporters">{{supporter}}; </span>
-                </div>    
+
+
+        <ui-view></ui-view>
+
+        <script type="text/ng-template" id="/home.html">
+            <div> 
+               <div>Add New Project </div>
+                <form ng-submit="addProject()">
+                    <input type="text" placeholder="Project Name" ng-model=name></input>
+                    <input type="text" placeholder="Owner Name" ng-model=owner></input>
+                    <input type="text" placeholder="goal" ng-model=goal></input>
+                    <button type="submit">Create</button>
+                </form>
+               <div ng-repeat="proj in projects">
+                <h3> {{proj.name}} </h3>
+                    <div>Owner: {{proj.owner}} </div>
+                    <div>Goal: ${{proj.goal}} </div>
+                    <div>Supporters: 
+                        <span ng-repeat="supporter in proj.supporters">{{supporter}}; </span>
+                    </div>    
+                </div>
             </div>
-        </div>
+        </script>
 
   </body>
 </html>  
