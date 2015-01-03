@@ -29,7 +29,7 @@
                     <h3>
                         <a href="#/projects/{{$index}}">{{proj.name}}</a>
                     </h3>
-                    <div>Owner: {{proj.owner}} </div>
+                    <div>Owner: <a href="#/users/{{proj.owner}}">{{proj.owner}}</a> </div>
                     <div>Goal: ${{proj.goal}} </div>
                     <div>Supporters: 
                         <div ng-repeat="supporter in proj.supporters">{{supporter.userName}}; </div>
@@ -51,6 +51,9 @@
             </div>
         </script>
 
+        <script type="text/ng-template" id="/users.html">
+            <h3>{{user}}</h3>
+        </script>
 
 
 
