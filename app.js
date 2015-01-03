@@ -7,8 +7,15 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var mongoose = require('mongoose');
 
 var app = express();
+
+mongoose.connect('mongodb://localhost/projects');
+require('./models/Projects');
+require('./models/Receivers');
+require('./models/Supporters');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
