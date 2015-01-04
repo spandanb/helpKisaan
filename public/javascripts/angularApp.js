@@ -7,7 +7,12 @@ function($stateProvider, $urlRouterProvider){
     .state('home',{
         url:'/home', 
         templateUrl:'/home.html',
-        controller:'MainCtrl'
+        controller:'MainCtrl',
+        resolve: {
+            postPromise: ['projects', function(projects){
+                return projects.getAll();
+            }]
+        }
     })
     .state('projects',{
         url: '/projects/{id}',
@@ -22,10 +27,17 @@ function($stateProvider, $urlRouterProvider){
 
     $urlRouterProvider.otherwise('home');
 }])
-.factory('projects',[function(){
+.factory('projects',['$http', function($http){
     var p = {
         projects:[]
     };
+    
+    p.getAll = function() {
+    return $http.get('/projects').success(function(data){
+      angular.copy(data, p.projects);
+    });
+  };
+    
     return p;
 }])
 .factory('users',[function(){

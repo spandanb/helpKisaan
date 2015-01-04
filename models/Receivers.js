@@ -5,4 +5,4 @@ var ReceiverSchema = new mongoose.Schema({
   projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }]
 });
 
-mongoose.model('Receiver', CommentSchema);
+mongoose.model('Receiver', ReceiverSchema);

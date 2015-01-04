@@ -5,4 +5,4 @@ var SupporterSchema = new mongoose.Schema({
   projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project' }]
 });
 
-mongoose.model('Supporter', CommentSchema);
+mongoose.model('Supporter', SupporterSchema);
