@@ -1,11 +1,14 @@
 <html>
   <head>
     <title>Kiva Clone</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"-->
     <link rel="stylesheet" href="/stylesheets/style.css">
     <!--link rel="stylesheet" href="style.css"-->
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-    <script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.min.js"></script>
+    <script src="javascripts/angular.min.js"></script>
+    <!--script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script-->
+    <script src="javascripts/angular-ui-router.min.js"></script>
+    <!--script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.min.js"></script-->
     <script src="/javascripts/angularApp.js"></script>
     <!--script src="angularApp.js"></script-->
   </head>
@@ -15,11 +18,17 @@
         <ui-view></ui-view>
 
 
-
+        <!--Home Page-->
         <script type="text/ng-template" id="/home.html">
             <div>
                <h1>Kiva</h1> 
                <div>Add New Project </div>
+               
+               <div class=right>
+                    <a href="#/signin" ng-hide="username">Sign In</a>
+                    <a href="#/users/{{username}}" ng-show="username">{{username}}</a>
+               </div>
+               
                 <form ng-submit="addProject()">
                     <input type="text" placeholder="Project Name" ng-model=name></input>
                     <input type="text" placeholder="Owner Name" ng-model=owner></input>
@@ -28,7 +37,7 @@
                 </form>
                 <div ng-repeat="proj in projects">
                     <h3>
-                        <a href="#/projects/{{$index}}">{{proj.name}}</a>
+                        <a href="#/projects/{{proj._id}}">{{proj.name}}</a>
                     </h3>
                     <div>Owner: <a href="#/users/{{proj.owner}}">{{proj.owner}}</a> </div>
                     <div>Goal: ${{proj.goal}} </div>
@@ -39,23 +48,51 @@
             </div>
         </script>
 
+        <!--Project Page-->
         <script type="text/ng-template" id="/projects.html">
-            <h3>{{project.name}}</h3>
-            <div>
-                {{project.owner}}
-            </div>
-            <div>
-                ${{project.goal}}
+            <h3>Name: {{project.name}}</h3>
+            <button class="right" ng-click="deleteProject()">Delete</button>
+            <div ng-click="clicked('goal')">
+                <span>Goal: $</span>
+                <span id="goal">{{project.goal}}</span>
             </div>
             <div ng-repeat="supporter in supporters">
                 <div>{{supporter}}</div>
             </div>
         </script>
-
+        
+        <!--User Page-->
         <script type="text/ng-template" id="/users.html">
             <h3>{{user}}</h3>
         </script>
-
+        
+        <!--Sign In Page-->
+        <script type="text/ng-template" id="/signin.html">
+            <h3>Sign In</h3>
+            <form ng-submit="signin()">
+                <input type="text" placeholder="Username" ng-model=username></input>
+                <input type="text" placeholder="Password" ng-model=password></input>
+                <button type="submit">Sign In</button>
+            </form>
+            
+            <div>
+                <a href="#/signup">Sign Up</a>
+            </div>
+        </script>
+        
+        <!--Signup Page-->        
+        <script type="text/ng-template" id="/signup.html">
+            <h3>Sign Up</h3>
+            <form ng-submit="signup()">
+                <input type="text" placeholder="Username" ng-model=username></input>
+                <input type="text" placeholder="Password" ng-model=password></input>
+                <input type="text" placeholder="Email" ng-model=email></input>
+                <input type="text" placeholder="First Name" ng-model=firstname></input>
+                <input type="text" placeholder="Last Name" ng-model=lastname></input>
+                
+                <button type="submit">Sign Up</button>
+            </form>
+        </script>
 
 
   </body>
