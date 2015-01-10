@@ -47,8 +47,8 @@ module.exports = function(passport){
     
     /*Create a project*/
     router.post('/projects', function(req, res, next) {
-      //console.log("req.body is:");
-      //console.log(req.body);
+      console.log("req.body is:");
+      console.log(req.body);
       var project = new Project(req.body);
     
       project.save(function(err, project){
@@ -103,31 +103,72 @@ module.exports = function(passport){
      ***********************************************/
     
     // GET login page.
+    //Unused
     router.get('/login', function(req, res) {
     // Display the Login page with any flash message, if any
             res.render('login', { message: req.flash('message') });
     });
    
     // Handle Login POST 
-    router.post('/login', passport.authenticate('login', {
+    /*router.post('/signin', passport.authenticate('login', {
             successRedirect: '/profile',
             failureRedirect: '/login',
             failureFlash : true  
     }));
-    
+    */
     // GET Registration Page 
+    //Unused
+    /*
     router.get('/signup', function(req, res){
             res.render('register',{message: req.flash('message')});
     });
+    */
     
     // Handle Registration POST 
+    /*
     router.post('/signup', passport.authenticate('signup', {
             successRedirect: '/profile',
             failureRedirect: '/signup',
             failureFlash : true  
-    }));
+        })           
+    );
+    */
+    
+    //Register
+    router.post('/signup', passport.authenticate('signup'), function(req,res){
+            console.log("req.user is: ");
+            console.log(req.user);
+            res.send(req.user);
+            
+        } 
+    );
+    
+    //Checks if logged in
+    router.get('/loggedin', function(req, res) {
+        res.send(req.isAuthenticated() ? req.user : '0');
+    }); 
+    
+    //Login
+    router.post('/login', passport.authenticate('login'), function(req, res) {
+        console.log("In POST /login");
+        res.send(req.user);
+    }); 
+        
+    /* //Original - from passport website
+    router.post('/signin', function(req, res, next) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { return next(err); }
+            if (!user) { return res.redirect('/login'); }
+            req.logIn(user, function(err) {
+              if (err) { return next(err); }
+              return res.redirect('/users/' + user.username);
+            });
+        })(req, res, next);
+    });
+    */
     
     // GET Profile Page
+    //Unused
     router.get('/profile', isAuthenticated, function(req, res){
             res.render('profile', { user: req.user });
     });

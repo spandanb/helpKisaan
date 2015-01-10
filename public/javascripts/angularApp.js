@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('kiva', ['ui.router'])
 .config([
 '$stateProvider',
@@ -24,8 +26,29 @@ function($stateProvider, $urlRouterProvider){
                 }]
         }
     })
+    .state('signin',{
+        url:'/signin',
+        templateUrl:'/signin.html',
+        controller: 'AuthCtrl',
+    })
+    .state('register',{
+        url:'/register',
+        templateUrl: '/register.html',
+        controller: 'AuthCtrl'   
+    })
+    .state('profile',{
+        url:'/profile',
+        templateUrl:'/profile.html',
+        controller: 'AuthCtrl'
+    })
+    ;
     
     $urlRouterProvider.otherwise('home');
+}])
+.factory('auth', ['$http', '$location', function($http, $location){
+    var a = {};
+    
+    return a;
 }])
 .factory('projects',['$http', '$location', function($http, $location){
     var p = {
@@ -40,6 +63,8 @@ function($stateProvider, $urlRouterProvider){
     };
     //Posts a new project
     p.create = function(project) {
+        console.log("project is: ");
+        console.log(project);
         return $http.post('/projects', project).success(function(data){
             p.projects.push(data);
         });
@@ -81,8 +106,9 @@ function($stateProvider, $urlRouterProvider){
 'projects',
 function($scope, $rootScope, projects, users){
     $scope.projects = projects.projects;
-
+    //console.log("In mainCtrl");
     $scope.addProject = function(){
+        console.log("In add project. Name is: " + $scope.name + ". Goal is: " + $scope.goal);
         projects.create({
             name:$scope.name,
             goal:$scope.goal    
@@ -97,7 +123,6 @@ function($scope, $rootScope, projects, users){
 '$scope',
 'projects',
 'project',
-
 function($scope, projects, project){
     $scope.project = project;
     
@@ -133,8 +158,66 @@ function($scope, projects, project){
     };
     
     $scope.updateValue = function(){
-        console.log("foo");
+        //console.log("foo");
         projects.update($scope.project._id, {"goal":$scope.goal});        
     }
 
-}]);
+}])
+.controller('AuthCtrl',[
+'$scope',
+'$http',
+'$rootScope',
+'$location',
+function($scope, $http, $rootScope, $location){
+    //console.log("In the AuthCtrl");
+    
+    $scope.signin = function(){
+        console.log("In signin function!");
+        console.log("Email is "  + $scope.email + ". Password is " + $scope.password);
+        //$http.post('/signup')
+    }
+    
+    $scope.register = function(){
+        console.log("In register function!");
+        console.log("Email is "  + $scope.email + ". Password is " + $scope.password + " Username is " + $scope.username);
+        $http.post('/signup', {
+                'username': $scope.username,
+                'password': $scope.password,
+                'email': $scope.email
+            }).success(function(user){
+                console.log("Successfully registered user");
+                //console.log("user is: ");
+                //console.log(user);
+                
+                $rootScope.user = user;
+                $scope.user;
+                $location.path('/profile');
+                
+            }).error(function(res){
+                console.log("Error: Unable to register user");
+                console.log(res);
+            });
+    }
+    
+    $scope.signin = function(){
+        $http.post('/login', {
+                'username': $scope.username,
+                'password': $scope.password
+            }).success(function(user){
+                console.log("Successfully signed in");
+                //console.log("user is: ");
+                //console.log(user);
+                
+                $rootScope.user = user;
+                $scope.user;
+                $location.path('/profile');
+                
+            }).error(function(res){
+                console.log("Error: Unable to signin user");
+                console.log(res);
+            });
+    }
+    
+    
+}])
+;
