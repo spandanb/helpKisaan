@@ -25,7 +25,7 @@
                <div>Add New Project </div>
                
                <div class=right>
-                    <a href="#/signin" ng-hide="username">Sign In</a>
+                    <a href="/login" ng-hide="username">Sign In</a>
                     <a href="#/users/{{username}}" ng-show="username">{{username}}</a>
                </div>
                
@@ -36,14 +36,14 @@
                     <button type="submit">Create</button>
                 </form>
                 <div ng-repeat="proj in projects">
-                    <h3>
-                        <a href="#/projects/{{proj._id}}">{{proj.name}}</a>
-                    </h3>
-                    <div>Owner: <a href="#/users/{{proj.owner}}">{{proj.owner}}</a> </div>
-                    <div>Goal: ${{proj.goal}} </div>
-                    <div>Supporters: 
-                        <div ng-repeat="supporter in proj.supporters">{{supporter.userName}}; </div>
-                    </div>    
+                    <a href="#/projects/{{proj._id}}">
+                        <h3>{{proj.name}}</h3>
+                        <div>Owner: <a href="#/users/{{proj.owner}}">{{proj.owner}}</a> </div>
+                        <div>Goal: ${{proj.goal}} </div>
+                        <div>Supporters: 
+                            <div ng-repeat="supporter in proj.supporters">{{supporter.userName}}; </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </script>
