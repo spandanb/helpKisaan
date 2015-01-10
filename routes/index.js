@@ -18,7 +18,8 @@ var isAuthenticated = function (req, res, next) {
 
 module.exports = function(passport){
     
-    //Used for debugging
+    //For debugging, matches all routes, outputs
+    //  verb, route, and params 
     router.all('*', function(req, res, next){
         //Output string
         var output = req.method + " " + req.url;
@@ -109,8 +110,8 @@ module.exports = function(passport){
    
     // Handle Login POST 
     router.post('/login', passport.authenticate('login', {
-            successRedirect: '/home',
-            failureRedirect: '/',
+            successRedirect: '/profile',
+            failureRedirect: '/login',
             failureFlash : true  
     }));
     
@@ -121,14 +122,14 @@ module.exports = function(passport){
     
     // Handle Registration POST 
     router.post('/signup', passport.authenticate('signup', {
-            successRedirect: '/home',
+            successRedirect: '/profile',
             failureRedirect: '/signup',
             failureFlash : true  
     }));
     
-    // GET Home Page
-    router.get('/home', isAuthenticated, function(req, res){
-            res.render('home', { user: req.user });
+    // GET Profile Page
+    router.get('/profile', isAuthenticated, function(req, res){
+            res.render('profile', { user: req.user });
     });
     
     // Handle Logout 
