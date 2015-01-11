@@ -1,5 +1,6 @@
 body {
-  padding: 50px;
+  /*padding-right: 50px;
+  padding-left: 50px;*/
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -10,4 +11,14 @@ a {
 .right{
     position: absolute;
     right: 150px;
+}
+
+.bs-example{
+    margin-left: 0;
+    margin-right: 0;
+    background-color: #fff;
+    border-color: #ddd;
+    border-width: 1px;
+    border-radius: 4px 4px 0 0;
+    box-shadow: none;
 }
