@@ -6,40 +6,133 @@ angular.module('kiva', ['ui.router'])
 '$urlRouterProvider',
 function($stateProvider, $urlRouterProvider){
     $stateProvider
+    //Handles landing page
     .state('home',{
-        url:'/home', 
-        templateUrl:'/home.html',
-        controller:'MainCtrl',
-        resolve: {
-            postPromise: ['projects', function(projects){
-                return projects.getAll();
-            }]
+        url:'/home',
+        views:{
+            "main":{
+                templateUrl:'/home.html',
+                controller:'MainCtrl',
+                resolve: {
+                    postPromise: ['projects', function(projects){
+                        return projects.getSome(3);
+                    }]
+                }
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'MainCtrl',
+            }
         }
     })
-    .state('projects', {
+    //Handles all projects
+    .state('projects',{
+        url:'/projects', 
+        views:{
+            "main":{
+                templateUrl:'/projects.html',
+                controller:'MainCtrl',
+                resolve: {
+                    postPromise: ['projects', function(projects){
+                        return projects.getAll();
+                    }]
+                }
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'MainCtrl',
+            }            
+        }
+        
+    })
+    //Handles creation of new project
+    .state('new_project',{
+        url:'/new_project', 
+        views:{
+            "main":{
+                templateUrl:'/new_project.html',
+                controller:'MainCtrl',
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'MainCtrl',
+            }            
+        }
+        
+    })
+    //Handles individual project
+    .state('project', {
         url: '/projects/{id}',
-        templateUrl: '/projects.html',
-        controller: 'ProjectsCtrl',
-        resolve: {
-            project: ['$stateParams', 'projects', function($stateParams, projects) {
-                    return projects.get($stateParams.id);
-                }]
+        views:{
+            "main":{
+                templateUrl:'/project.html',
+                controller:'ProjectsCtrl',
+                resolve: {
+                    project: ['$stateParams', 'projects', function($stateParams, projects) {
+                            return projects.get($stateParams.id);
+                        }]
+                }
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'MainCtrl',
+            }            
         }
     })
+    //Handles signin
     .state('signin',{
         url:'/signin',
-        templateUrl:'/signin.html',
-        controller: 'AuthCtrl',
+        views:{
+            "main":{
+                templateUrl:'/signin.html',
+                controller: 'AuthCtrl',
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'MainCtrl',
+            }            
+        }
     })
+    //Handles register
     .state('register',{
         url:'/register',
-        templateUrl: '/register.html',
-        controller: 'AuthCtrl'   
+        views:{
+            "main":{
+                templateUrl:'/register.html',
+                controller: 'AuthCtrl',
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'MainCtrl',
+            }            
+        }
     })
+    //Handles profile
     .state('profile',{
         url:'/profile',
-        templateUrl:'/profile.html',
-        controller: 'AuthCtrl'
+        views:{
+            "main":{
+                templateUrl:'/profile.html',
+                controller: 'AuthCtrl',
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'MainCtrl',
+            }            
+        }
+    })
+    //Handles About Page
+    .state('about',{
+        url:'/about',
+        views:{
+            "main":{
+                templateUrl:'/about.html',
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'MainCtrl',
+            }            
+        }
     })
     ;
     
@@ -59,6 +152,12 @@ function($stateProvider, $urlRouterProvider){
     p.getAll = function() {
         return $http.get('/projects').success(function(data){
           angular.copy(data, p.projects);
+        });
+    };
+    //Get count # of projects
+    p.getSome = function(count) {
+        return $http.get('/projects').success(function(data){
+          angular.copy(data.slice(0, count), p.projects);
         });
     };
     //Posts a new project
