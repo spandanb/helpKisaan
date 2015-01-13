@@ -12,7 +12,7 @@
         <script src="/javascripts/angularApp.js"></script>
         <!--script src="angularApp.js"></script-->
     </head>
-    <body ng-app="kiva">
+    <body ng-app="sia">
   
         <!--Include Navbar -->
         <div ui-view="header"></div>
@@ -33,6 +33,7 @@
                         <li><a href="#/">Home</a></li>
                         <li><a href="#about">About</a></li>
                         <li><a href="#/projects">Projects</a></li>
+                        <li ng-show={{$root.user}}><a href="#/projects">{{$root.user.username}}</a></li>
                         <li>
                             <form class="navbar-form navbar-left" role="search">
                                 <div class="form-group">
@@ -45,9 +46,10 @@
             
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#/new_project">New Project</a></li>
-                        <li><a href="#/register">Register</a></li>
-                        <li><a href="#/signin">Sign In</a></li>
+                        <li><a href="{{$root.user?'#/new_project':'#/signin'}}">New Project</a></li>
+                        <li ng-hide={{$root.user}}><a href="#/register">Register</a></li>
+                        <li ng-hide={{$root.user}}><a href="#/signin">Sign In</a></li>
+                        <li ng-show={{$root.user}} ng-click="signout()"><a href="#">Log Out</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
               </div>
@@ -154,26 +156,7 @@
                 </form>
         </script>
         
-        <!--User Page-->
-        <!--TODO: Remove -->
-        <script type="text/ng-template" id="/users.html">
-            <h3>{{user}}</h3>
-        </script>
-        
-        <!--Sign In Page-->
-        <!--script type="text/ng-template" id="/signin.html">
-            <h3>Sign In</h3>
-            <form ng-submit="signin()">
-                <input type="text" placeholder="Username" ng-model=username></input>
-                <input type="text" placeholder="Password" ng-model=password></input>
-                <button type="submit">Sign In</button>
-            </form>
-            
-            <div>
-                <a href="#/signup">Sign Up</a>
-            </div>
-        </script-->
-
+        <!-- Signin Page-->
         <script type="text/ng-template" id="/signin.html">
             <h1>Sign In</h1>
             <img class='profile-img' src="/images/user.png"></img>
@@ -209,13 +192,14 @@
         <!--About Page -->
         <script type="text/ng-template" id="/about.html">
             <ul>
-                <li>Sia is a peer-to-peer lending and donating system that empowers the farmers.</li>
+                <li>Sia is a peer-to-peer lending and donating system that empowers farmers.</li>
                 <li>Sia supports 3 main initiatives.</li>
-                <li>People can crowd-fund entrepreneurial initiatives, such as helping buy new seed or a tracktor.</li>
-                <li>Project can be enlisted as a donation or loan project.</li>
-                <li>Encourages collaboration: Loans 50% exempt if 50% paid to a fellow farmer.</li>
+                <li>People can crowd-fund entrepreneurial initiatives, such as helping buy new seed or a tractor.</li>
+                <li>People can crowd-fund the paying of the farmer's debt- debt where the farmer's lands is held as collalorator by lenders (that charge very high interest, ~40%).</li>
+                <li>Projects can be listed as a donation or loan project.</li>
+                <li>Sia encourages collaboration and co-operation between farmers by exempting 50% of loans if the money is used to help the initiatives of fellow farmers.</li>
                 <li>Loan is primarily paid back in the form of a percent of the produce above a certain threshold, below which the farmer keeps.</li>
-                <li>People can donate/lend to farmers in proximity, so produce can be picked up, manually.</li>
+                <li>People can donate/lend to farmers in geographical proximity, so they can directly pick up the produce.</li>
                 <li>This will allow people to directly see how their money is being used.</li>
             </ul>    
             </p>

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('kiva', ['ui.router'])
+angular.module('sia', ['ui.router'])
 .config([
 '$stateProvider',
 '$urlRouterProvider',
@@ -21,7 +21,12 @@ function($stateProvider, $urlRouterProvider){
             },
             "header":{
                 templateUrl:'/navbar.html',
-                controller:'MainCtrl',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
             }
         }
     })
@@ -40,7 +45,12 @@ function($stateProvider, $urlRouterProvider){
             },
             "header":{
                 templateUrl:'/navbar.html',
-                controller:'MainCtrl',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
             }            
         }
         
@@ -55,7 +65,12 @@ function($stateProvider, $urlRouterProvider){
             },
             "header":{
                 templateUrl:'/navbar.html',
-                controller:'MainCtrl',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
             }            
         }
         
@@ -75,7 +90,12 @@ function($stateProvider, $urlRouterProvider){
             },
             "header":{
                 templateUrl:'/navbar.html',
-                controller:'MainCtrl',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
             }            
         }
     })
@@ -89,7 +109,12 @@ function($stateProvider, $urlRouterProvider){
             },
             "header":{
                 templateUrl:'/navbar.html',
-                controller:'MainCtrl',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
             }            
         }
     })
@@ -103,7 +128,30 @@ function($stateProvider, $urlRouterProvider){
             },
             "header":{
                 templateUrl:'/navbar.html',
-                controller:'MainCtrl',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
+            }            
+        }
+    })
+    .state('signout',{
+        url:'/signout',
+        views:{
+            "main":{
+                templateUrl:'/register.html',
+                controller: 'AuthCtrl',
+            },
+            "header":{
+                templateUrl:'/navbar.html',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user_obj: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
             }            
         }
     })
@@ -117,7 +165,12 @@ function($stateProvider, $urlRouterProvider){
             },
             "header":{
                 templateUrl:'/navbar.html',
-                controller:'MainCtrl',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
             }            
         }
     })
@@ -130,7 +183,12 @@ function($stateProvider, $urlRouterProvider){
             },
             "header":{
                 templateUrl:'/navbar.html',
-                controller:'MainCtrl',
+                controller:'HeaderCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
             }            
         }
     })
@@ -138,8 +196,49 @@ function($stateProvider, $urlRouterProvider){
     
     $urlRouterProvider.otherwise('home');
 }])
-.factory('auth', ['$http', '$location', function($http, $location){
-    var a = {};
+.factory('auth', [
+'$http',
+'$location',
+'$rootScope',
+function($http, $location, $rootScope){
+    var a = {
+            user:null
+        };
+    
+    a.getUser = function(){
+        return $http.get('/loggedin').then(
+        function(res){
+            return res.data;
+        });
+    };    
+    
+    //NOTE: Does not work    
+    //data is the object of login credentials,
+    a.signin = function(data, success_callback, failure_callback){
+        $http.post('/login', data).success(function(user){
+                console.log("Successfully signed in:");
+                console.log(user);
+                angular.copy(a.user, user);
+                if(success_callback)success_callback(user);
+                
+            }).error(function(res){
+                console.log("Error: Unable to signin user");
+                console.log(res);
+                angular.copy(a.user, null);
+                if(error_callback) error_callback();
+            });
+    };
+    
+    a.signout = function(){        
+        $http.get('/signout').success(function(){
+            console.log("Succesfully signed out!");
+            $rootScope.user = null;
+        });
+    };
+    
+    a.register = function(){
+    }; 
+    
     
     return a;
 }])
@@ -201,11 +300,9 @@ function($stateProvider, $urlRouterProvider){
 }])
 .controller('MainCtrl', [
 '$scope',
-'$rootScope',
 'projects',
-function($scope, $rootScope, projects, users){
+function($scope, projects){
     $scope.projects = projects.projects;
-    //console.log("In mainCtrl");
     $scope.addProject = function(){
         console.log("In add project. Name is: " + $scope.name + ". Goal is: " + $scope.goal);
         projects.create({
@@ -268,33 +365,22 @@ function($scope, projects, project){
 '$rootScope',
 '$location',
 function($scope, $http, $rootScope, $location){
-    //console.log("In the AuthCtrl");
-    
-    $scope.signin = function(){
-        console.log("In signin function!");
-        console.log("Email is "  + $scope.email + ". Password is " + $scope.password);
-        //$http.post('/signup')
-    }
     
     $scope.register = function(){
-        console.log("In register function!");
-        console.log("Email is "  + $scope.email + ". Password is " + $scope.password + " Username is " + $scope.username);
         $http.post('/signup', {
                 'username': $scope.username,
                 'password': $scope.password,
                 'email': $scope.email
-            }).success(function(user){
+            }).success(function(res){
                 console.log("Successfully registered user");
-                //console.log("user is: ");
-                //console.log(user);
-                
-                $rootScope.user = user;
-                $scope.user;
+                $rootScope.user = res;
+                //Redirect
                 $location.path('/profile');
                 
             }).error(function(res){
                 console.log("Error: Unable to register user");
                 console.log(res);
+                $scope.error = "Error: Unable to register user";
             });
     }
     
@@ -302,21 +388,36 @@ function($scope, $http, $rootScope, $location){
         $http.post('/login', {
                 'username': $scope.username,
                 'password': $scope.password
-            }).success(function(user){
-                console.log("Successfully signed in");
-                //console.log("user is: ");
-                //console.log(user);
-                
-                $rootScope.user = user;
-                $scope.user;
+            }).success(function(res){
+                console.log("Successfully signed in");                
+                $rootScope.user = res;
                 $location.path('/profile');
                 
             }).error(function(res){
                 console.log("Error: Unable to signin user");
                 console.log(res);
+                $scope.error = "Error: Unable to signin user";
             });
     }
     
+    $scope.signout = function(){
+        $http.get('/signout').success(function(){
+            console.log("Succesfully signed out!");
+            $rootScope.user = null;
+        });
+    };
+}])
+.controller('HeaderCtrl', [
+'$scope',    
+'$rootScope',
+'auth',
+'user',
+function($scope, $rootScope, auth, user){
+    //Sets $rootScope.user if user still logged in 
+    $rootScope.user = user;
     
+    $scope.signout = function(){
+        auth.signout();
+    }
 }])
 ;
