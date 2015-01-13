@@ -244,7 +244,8 @@ function($http, $location, $rootScope){
 .factory('projects',[
 '$http',
 '$location',
-function($http, $location){
+'$state',
+function($http, $location, $state){
     var p = {
         projects:[]
     };
@@ -277,9 +278,10 @@ function($http, $location){
     };
     //Update a project
     p.update = function(id, changes){
-        return $http.post('/projects/' + id, changes)            
+        return $http.put('/projects/' + id, changes)            
             .success(function(res){
-                console.log("Success: updated project with id: " + id );                
+                console.log("Success: updated project with id: " + id );
+                $state.reload();
             })
             .error(function(res){
                 console.log("Error: Unable to update project with id: " + id);
@@ -359,6 +361,7 @@ function($scope, projects, project){
     };
     
     $scope.updateValue = function(){
+        //console.log("Here");
         projects.update($scope.project._id, {"goal":$scope.goal});        
     }
     
@@ -366,11 +369,11 @@ function($scope, projects, project){
         //Check for valid input
         if (isNaN($scope.amount))
             return;
+        //Check if number is > 0
         var amount = Number($scope.amount);
         if (amount <= 0)
-            return;
-    
-        projects.update(project._id, {funds: Number(project.funds + $scope.amount)}); 
+            return;    
+        projects.update(project._id, {funds: Number(project.funds + amount)}); 
     }
     
 
