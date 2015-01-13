@@ -239,10 +239,12 @@ function($http, $location, $rootScope){
     a.register = function(){
     }; 
     
-    
     return a;
 }])
-.factory('projects',['$http', '$location', function($http, $location){
+.factory('projects',[
+'$http',
+'$location',
+function($http, $location){
     var p = {
         projects:[]
     };
@@ -301,13 +303,15 @@ function($http, $location, $rootScope){
 .controller('MainCtrl', [
 '$scope',
 'projects',
-function($scope, projects){
+'$rootScope',
+function($scope, projects, $rootScope){
     $scope.projects = projects.projects;
     $scope.addProject = function(){
         console.log("In add project. Name is: " + $scope.name + ". Goal is: " + $scope.goal);
         projects.create({
             name:$scope.name,
-            goal:$scope.goal    
+            goal:$scope.goal,
+            owners: [$rootScope.user._id],            
         });
         $scope.owner = null;
         $scope.name = null;
@@ -326,6 +330,7 @@ function($scope, projects, project){
         projects.delete($scope.project._id);
     };
     
+    //Allows owners to modify goal of project
     $scope.clicked = function(id){
 
         if (!id) {return;}
@@ -354,9 +359,20 @@ function($scope, projects, project){
     };
     
     $scope.updateValue = function(){
-        //console.log("foo");
         projects.update($scope.project._id, {"goal":$scope.goal});        
     }
+    
+    $scope.donate = function(){
+        //Check for valid input
+        if (isNaN($scope.amount))
+            return;
+        var amount = Number($scope.amount);
+        if (amount <= 0)
+            return;
+    
+        projects.update(project._id, {funds: Number(project.funds + $scope.amount)}); 
+    }
+    
 
 }])
 .controller('AuthCtrl',[
@@ -414,10 +430,14 @@ function($scope, $http, $rootScope, $location){
 'user',
 function($scope, $rootScope, auth, user){
     //Sets $rootScope.user if user still logged in 
-    $rootScope.user = user;
+    $rootScope.user = user;    
     
     $scope.signout = function(){
         auth.signout();
-    }
+    };
+
+    
+    
+    
 }])
 ;

@@ -46,7 +46,7 @@
             
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{$root.user?'#/new_project':'#/signin'}}">New Project</a></li>
+                        <li><a href="{{(!!$root.user && $root.user!=='0')?'#/new_project':'#/signin'}}">New Project</a></li>
                         <li ng-hide={{$root.user}}><a href="#/register">Register</a></li>
                         <li ng-hide={{$root.user}}><a href="#/signin">Sign In</a></li>
                         <li ng-show={{$root.user}} ng-click="signout()"><a href="#">Log Out</a></li>
@@ -62,6 +62,12 @@
         <script type="text/ng-template" id="/home.html">
             <div>                               
                 <div class="row center-block">
+                    <div class="jumbotron">
+                        <h1>Empower Farmers!</h1>
+                        <p>Sia is network of network of donors, lenders and borrowers. <a href="#/about">Read More</a></p>
+                        <p><a class="btn btn-primary btn-lg" href="#/projects" role="button">See Projects</a></p>
+                    </div>
+                    
                     <!--div class="col-md-offset-1"-->
                     <div ng-repeat="proj in projects">  
                             <div class="col-md-4">
@@ -84,17 +90,6 @@
                                     </div>
                                 </a>
                             </div>
-                        
-                        
-                        
-                        <!--a href="#/projects/{{proj._id}}">
-                            <h3>{{proj.name}}</h3>
-                            <div>Owner: <a href="#/users/{{proj.owner}}">{{proj.owner}}</a> </div>
-                            <div>Goal: ${{proj.goal}} </div>
-                            <div>Supporters: 
-                                <div ng-repeat="supporter in proj.supporters">{{supporter.userName}}; </div>
-                            </div>
-                        </a-->
                     </div>
                     <!--/div-->
                 </div>    
@@ -139,9 +134,20 @@
                 <span>Goal: $</span>
                 <span id="goal">{{project.goal}}</span>
             </div>
-            <div ng-repeat="supporter in supporters">
-                <div>{{supporter}}</div>
+            
+            <div>Funds: ${{project.funds}}</div>
+            
+            <!--div ng-repeat="owner in project.owners">
+                <div>{{owner}}</div>
+            </div-->
+            
+            <div>                
+                <form ng-submit="donate()">
+                    $<input type="text" placeholder="Amount" ng-model=amount></input>
+                    <button type="submit">Give</button>
+                </form>                
             </div>
+            
         </script>
         
         <!-- Add New Project Page -->
@@ -201,8 +207,7 @@
                 <li>Loan is primarily paid back in the form of a percent of the produce above a certain threshold, below which the farmer keeps.</li>
                 <li>People can donate/lend to farmers in geographical proximity, so they can directly pick up the produce.</li>
                 <li>This will allow people to directly see how their money is being used.</li>
-            </ul>    
-            </p>
+            </ul>
         </script>
 
         

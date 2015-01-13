@@ -46,7 +46,7 @@ module.exports = function(passport){
     
     
     /*Create a project*/
-    router.post('/projects', function(req, res, next) {
+    router.post('/projects', isAuthenticated, function(req, res, next) {
       console.log("req.body is:");
       console.log(req.body);
       var project = new Project(req.body);
@@ -66,6 +66,17 @@ module.exports = function(passport){
         if (!project) { return next(new Error("can't find project")); }
     
         req.project = project;
+        //var owners = [];
+        //console.log("req.project.owners.length is XXXXXXXXXXXXXXXXXXXXXXXX"); 
+        //console.log(req.project.owners.length)
+        //console.log(req.project.owners);
+        //for(var i=0; i<req.project.owners.length; i++){
+        //    console.log("SASS");
+        //    console.log(req.project.owners[i]);
+        //    console.log(User.findById(req.project.owners[i]));
+        //}
+        //console.log(req.project.owners);
+        //console.log("FFFFFFFFFFFFFFOOOOOOOO");
         return next();
       });
     });
@@ -136,14 +147,14 @@ module.exports = function(passport){
     
     //Register
     router.post('/signup', passport.authenticate('signup'), function(req,res){
-            console.log("req.user is: ");
-            console.log(req.user);
-            res.send(req.user);
-            
+            //console.log("req.user is: ");
+            //console.log(req.user);
+            res.send(req.user); 
         } 
     );
     
     //Checks if logged in
+    //TODO: what if user intercepts incoming responses and modifies them
     router.get('/loggedin', function(req, res) {
         res.send(req.isAuthenticated() ? req.user : '0');
     }); 
@@ -153,19 +164,6 @@ module.exports = function(passport){
         console.log("In POST /login");
         res.send(req.user);
     }); 
-        
-    /* //Original - from passport website
-    router.post('/signin', function(req, res, next) {
-        passport.authenticate('local', function(err, user, info) {
-            if (err) { return next(err); }
-            if (!user) { return res.redirect('/login'); }
-            req.logIn(user, function(err) {
-              if (err) { return next(err); }
-              return res.redirect('/users/' + user.username);
-            });
-        })(req, res, next);
-    });
-    */
     
     // GET Profile Page
     //Unused
