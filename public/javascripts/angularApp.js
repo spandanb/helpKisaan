@@ -313,7 +313,8 @@ function($scope, projects, $rootScope){
         projects.create({
             name:$scope.name,
             goal:$scope.goal,
-            owners: [$rootScope.user._id],            
+            description: $scope.description, 
+            owner: $rootScope.user._id            
         });
         $scope.owner = null;
         $scope.name = null;
@@ -323,15 +324,15 @@ function($scope, projects, $rootScope){
 }])
 .controller('ProjectsCtrl', [
 '$scope',
+'$rootScope',
 'projects',
 'project',
-function($scope, projects, project){
+function($scope, $rootScope, projects, project){
     $scope.project = project;
-    
+        
     $scope.deleteProject = function(){
         projects.delete($scope.project._id);
     };
-    
     //Allows owners to modify goal of project
     $scope.clicked = function(id){
 

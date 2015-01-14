@@ -33,7 +33,6 @@
                         <li><a href="#/">Home</a></li>
                         <li><a href="#about">About</a></li>
                         <li><a href="#/projects">Projects</a></li>
-                        <li ng-show={{$root.user}}><a href="#/projects">{{$root.user.username}}</a></li>
                         <li>
                             <form class="navbar-form navbar-left" role="search">
                                 <div class="form-group">
@@ -102,13 +101,14 @@
                 <div class="row center-block">
                     <div ng-repeat="proj in projects">  
                             <div class="col-md-4">
-                                <a href="#/projects/{{proj._id}}">
                                     <div class="thumbnail">
-                                        <img data-src="holder.js/100%x200" alt="100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxkZWZzLz48cmVjdCB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjkyLjQ2MDkzNzUiIHk9IjEwMCIgc3R5bGU9ImZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMXB0O2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjI0MngyMDA8L3RleHQ+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="height: 200px; width: 100%; display: block;">
+                                        <a href="#/projects/{{proj._id}}">
+                                            <img data-src="holder.js/100%x200" alt="100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxkZWZzLz48cmVjdCB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjkyLjQ2MDkzNzUiIHk9IjEwMCIgc3R5bGU9ImZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMXB0O2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjI0MngyMDA8L3RleHQ+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="height: 200px; width: 100%; display: block;">
+                                        </a>
                                     </div>
                                     <div class="caption">
-                                       <h3>{{proj.name}}</h3>
-                                       <p>Some sample text. Some sample text.</p>
+                                       <h3><a href="#/projects/{{proj._id}}">{{proj.name}}</a></h3>
+                                       <p>{{proj.description}} <a href="#/projects/{{proj._id}}">Read More</a></p>
                                        <p>Goal: {{proj.goal}}</p>
                                        <p>
                                           <a href="#" class="btn btn-primary" role="button">
@@ -129,7 +129,7 @@
         <!--Project Page-->
         <script type="text/ng-template" id="/project.html">
             <h3>Name: {{project.name}}</h3>
-            <button class="right" ng-click="deleteProject()">Delete</button>
+            <button ng-hide={{$root.user._id!=project.owner}} class="right" ng-click="deleteProject()">Delete</button>
             <div ng-click="clicked('goal')">
                 <span>Goal: $</span>
                 <span id="goal">{{project.goal}}</span>
@@ -137,10 +137,8 @@
             
             <div>Funds: ${{project.funds}}</div>
             
-            <!--div ng-repeat="owner in project.owners">
-                <div>{{owner}}</div>
-            </div-->
-            
+            <!--div>{{project.owner}}</div-->
+
             <div>                
                 <form ng-submit="donate()">
                     $<input type="text" placeholder="Amount" ng-model=amount></input>
@@ -152,41 +150,179 @@
         
         <!-- Add New Project Page -->
         <script type="text/ng-template" id="/new_project.html">
+                <!--
                 <div>Add New Project </div>
-                            
+                                
                 <form ng-submit="addProject()">
-                    <input type="text" placeholder="Project Name" ng-model=name></input>
-                    <input type="text" placeholder="Owner Name" ng-model=owner></input>
-                    <input type="text" placeholder="goal" ng-model=goal></input>
-                    <button type="submit">Create</button>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Project Name" ng-model="name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Goal" ng-model="goal">$
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
                 </form>
+                --> 
+                  
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+                        <div class="account-wall-2">
+
+                            <h3>Create New Project</h3>
+                            <hr class="colorgraph">
+                            
+                            <form role="form" ng-submit="addProject()">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-12">
+                                    <input type="text" ng-model=name class="form-control" placeholder="Project Name" tabindex="1">
+                                </div>
+                                <div class="input-group form-group col-xs-12 col-sm-6 col-md-6">
+                                    <div class="input-group-addon">$</div>
+                                    <input type="text" ng-model=goal class="form-control" placeholder="Project Goal" tabindex="2">
+                                </div>
+                                <!--div class="col-xs-12 col-sm-6 col-md-12">
+                                    <textarea ng-model=description class="form-control" placeholder="Project Description" tabindex="3">
+                                </div-->
+                                <div class="form-group col-xs-12 col-sm-6 col-md-12">
+                                    <input type="text" ng-model=description class="form-control" placeholder="Project Description" tabindex="3">
+                                </div>
+                                <div class="row down">
+                                    <div class="col-xs-12 col-md-12">
+                                            <!--hr class="colorgraph"-->
+                                            <input type="submit" value="Create" class="btn btn-info btn-block btn-lg">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>        
         </script>
         
         <!-- Signin Page-->
         <script type="text/ng-template" id="/signin.html">
-            <h1>Sign In</h1>
-            <img class='profile-img' src="/images/user.png"></img>
+            <!--h3>Sign Up</h3>
             <form ng-submit="signin()">
-                <input type="text" ng-model="username" class="form-control" placeholder="Username" required autofocus></input>
-                <input type="password" ng-model="password" class="form-control" placeholder="Password" required></input>
-                <button class="btn btn-lg btn-primary btn-block" type='submit'>Sign in</button>
-            </form>
-            <a href="#/register" class="text-center new-account">Create an Account</a>
+                <input type="text" ng-model="username" placeholder="Username" required autofocus>
+                <input type="password" ng-model="password" placeholder="Password" required>
+                <button type="submit">Sign In</button>
+            </form-->
+         
+         <!--  Google style login 
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-md-offset-4">
+                        <div class="account-wall">
+                            <div id="my-tab-content" class="tab-content">
+                                <div class="tab-pane active" id="login">
+                                    <img class="profile-img" src="/images/user.png" alt="">
+                                        <form class="form-signin" ng-submit="signin()">
+                                                <input type="text" class="form-control" ng-model="username" placeholder="Username" required autofocus>
+                                                <input type="password" class="form-control" ng-model="password" placeholder="Password" required>
+                                                
+                                                <hr class="colorgraph">
+                                                <input type="submit" class="btn btn-lg btn-default btn-block btn-success" value="Sign In" />
+                                        </form>
+                                        <div id="tabs" data-tabs="tabs">
+                                                <p class="text-center"><a href="#/register" data-toggle="tab">Create an Account?</a></p>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+                        <div class="account-wall-2">
+
+                            <h3>Sign In</h3>
+                            <hr class="colorgraph">
+                            
+                            <form role="form" ng-submit="signin()">
+                                <div class="form-group col-xs-12 col-sm-6 col-md-12">
+                                    <input type="text" ng-model=username class="form-control" placeholder="Username" tabindex="1">
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6 col-md-12">
+                                    <input type="password" ng-model=password class="form-control" placeholder="Password" tabindex="2">
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12">
+                                            <hr class="colorgraph">
+                                            <input type="submit" value="Sign In" class="btn btn-success btn-block btn-lg">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>        
         </script>
 
         
         <!--Register Page-->        
         <script type="text/ng-template" id="/register.html">
-            <h3>Register</h3>
+            <!--h3>Register</h3>
             <form ng-submit="register()">
                 <input type="text" placeholder="Username" ng-model=username required autofocus class="form-control"></input>
                 <input type="password" placeholder="Password" ng-model=password required class="form-control nomargin"></input>
                 <input type="text" placeholder="Email" ng-model=email required class="form-control"></input>
                 <input type="text" placeholder="First Name" ng-model=firstname class="form-control"></input>
                 <input type="text" placeholder="Last Name" ng-model=lastname  class="form-control"></input>
-                                                
                 <button type="submit">Register</button>
-            </form>
+            </form-->
+            
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                    <div class="account-wall-2">
+                    <form role="form" ng-submit="register()">
+                        <h3>Register</h3>
+                        <hr class="colorgraph">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="text" ng-model=firstname class="form-control" placeholder="First Name" tabindex="1">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                        <input type="text" ng-model=lastname class="form-control" placeholder="Last Name" tabindex="2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" ng-model=username class="form-control" placeholder="Username" tabindex="3">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" ng-model=email class="form-control" placeholder="Email" tabindex="4">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="password" ng-model=password class="form-control" placeholder="Password" tabindex="5">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="password" class="form-control" placeholder="Confirm Password" tabindex="6">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" ng-model=location class="form-control" placeholder="Location" tabindex="7">
+                        </div>
+                        
+                        <hr class="colorgraph">
+                        <div class="row">
+                                <div class="col-xs-12 col-md-6"><input type="submit" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+                                <div class="col-xs-12 col-md-6"><a href="#" class="btn btn-success btn-block btn-lg">Sign In</a></div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
         </script>
 
         <!--Profile Page -->
