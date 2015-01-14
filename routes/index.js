@@ -76,10 +76,7 @@ module.exports = function(passport){
     
     /*Create a project*/
     router.post('/projects', requireAuth, function(req, res, next) {
-      console.log("req.body is:");
-      console.log(req.body);
-      var project = new Project(req.body);
-      project.owner = req.user;  
+      var project = new Project(req.body);  
       project.save(function(err, project){
         if(err){ return next(err); }
     
@@ -130,39 +127,7 @@ module.exports = function(passport){
     /***********************************************
      *****************PASSPORT**********************
      ***********************************************/
-    
-    // GET login page.
-    //Unused
-    router.get('/login', function(req, res) {
-    // Display the Login page with any flash message, if any
-            res.render('login', { message: req.flash('message') });
-    });
-   
-    // Handle Login POST 
-    /*router.post('/signin', passport.authenticate('login', {
-            successRedirect: '/profile',
-            failureRedirect: '/login',
-            failureFlash : true  
-    }));
-    */
-    // GET Registration Page 
-    //Unused
-    /*
-    router.get('/signup', function(req, res){
-            res.render('register',{message: req.flash('message')});
-    });
-    */
-    
-    // Handle Registration POST 
-    /*
-    router.post('/signup', passport.authenticate('signup', {
-            successRedirect: '/profile',
-            failureRedirect: '/signup',
-            failureFlash : true  
-        })           
-    );
-    */
-    
+           
     //Register
     router.post('/signup', passport.authenticate('signup'), function(req,res){
             res.send(req.user); 
@@ -180,14 +145,8 @@ module.exports = function(passport){
         console.log("In POST /login");
         res.send(req.user);
     }); 
-    
-    // GET Profile Page
-    //Unused
-    router.get('/profile', isAuthenticated, function(req, res){
-            res.render('profile', { user: req.user });
-    });
-    
-    // Handle Logout 
+        
+    //Logout 
     router.get('/signout', function(req, res) {
             req.logout();
             res.redirect('/');
@@ -195,6 +154,3 @@ module.exports = function(passport){
     
     return router;
 }
-
-
-//module.exports = router;
