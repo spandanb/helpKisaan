@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -13,6 +15,33 @@ var isAuthenticated = function (req, res, next) {
 		return next();
 	// if the user is not authenticated then redirect him to the login page
 	res.redirect('/');
+}
+
+
+// check if the user is logged in
+var requireAuth = function(req, res, next){
+
+  if(!req.isAuthenticated()){
+    req.session.messages = "You need to login to view this page";
+    res.status(404).send('Page Not Found.');
+  }else{
+    next();
+  }
+}
+
+//Check if logged in user is project owner
+var isOwner = function(req, res, next){
+
+  if(!req.isAuthenticated()){
+    req.session.messages = "You need to login to view this page";
+    res.status(404).send('Page Not Found.');
+  }else if(String(req.user._id) != String(req.project.owner)){
+    req.session.messages = "Unauthorized request";
+    res.status(404).send('Page Not Found.');
+  }
+  else{
+    next();
+  }
 }
 
 
@@ -46,11 +75,11 @@ module.exports = function(passport){
     
     
     /*Create a project*/
-    router.post('/projects', isAuthenticated, function(req, res, next) {
+    router.post('/projects', requireAuth, function(req, res, next) {
       console.log("req.body is:");
       console.log(req.body);
       var project = new Project(req.body);
-    
+      project.owner = req.user;  
       project.save(function(err, project){
         if(err){ return next(err); }
     
@@ -66,17 +95,6 @@ module.exports = function(passport){
         if (!project) { return next(new Error("can't find project")); }
     
         req.project = project;
-        //var owners = [];
-        //console.log("req.project.owners.length is XXXXXXXXXXXXXXXXXXXXXXXX"); 
-        //console.log(req.project.owners.length)
-        //console.log(req.project.owners);
-        //for(var i=0; i<req.project.owners.length; i++){
-        //    console.log("SASS");
-        //    console.log(req.project.owners[i]);
-        //    console.log(User.findById(req.project.owners[i]));
-        //}
-        //console.log(req.project.owners);
-        //console.log("FFFFFFFFFFFFFFOOOOOOOO");
         return next();
       });
     });
@@ -88,7 +106,7 @@ module.exports = function(passport){
     
     
     /*Update a project*/
-    router.put('/projects/:project', function(req, res, next){    
+    router.put('/projects/:project', isOwner, function(req, res, next){    
         //Updates the properties
         for(var property in req.body){
             req.project[property] = req.body[property]     
@@ -102,7 +120,7 @@ module.exports = function(passport){
     });
     
     /*Delete a project*/
-    router.delete('/projects/:project', function(req, res, next) {    
+    router.delete('/projects/:project', isOwner, function(req, res, next) {    
       //Delete project
       req.project.remove();
       //Send response
@@ -147,8 +165,6 @@ module.exports = function(passport){
     
     //Register
     router.post('/signup', passport.authenticate('signup'), function(req,res){
-            //console.log("req.user is: ");
-            //console.log(req.user);
             res.send(req.user); 
         } 
     );
