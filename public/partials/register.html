@@ -1,0 +1,60 @@
+
+<!--h3>Register</h3>
+<form ng-submit="register()">
+    <input type="text" placeholder="Username" ng-model=username required autofocus class="form-control"></input>
+    <input type="password" placeholder="Password" ng-model=password required class="form-control nomargin"></input>
+    <input type="text" placeholder="Email" ng-model=email required class="form-control"></input>
+    <input type="text" placeholder="First Name" ng-model=firstname class="form-control"></input>
+    <input type="text" placeholder="Last Name" ng-model=lastname  class="form-control"></input>
+    <button type="submit">Register</button>
+</form-->
+
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <div class="account-wall-2">
+        <form role="form" ng-submit="register()">
+            <h3>Register</h3>
+            <hr class="colorgraph">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <input type="text" ng-model=firstname class="form-control" placeholder="First Name" tabindex="1">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                            <input type="text" ng-model=lastname class="form-control" placeholder="Last Name" tabindex="2">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" ng-model=username class="form-control" placeholder="Username" tabindex="3">
+            </div>
+            <div class="form-group">
+                <input type="email" ng-model=email class="form-control" placeholder="Email" tabindex="4">
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <input type="password" ng-model=password class="form-control" placeholder="Password" tabindex="5">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Confirm Password" tabindex="6">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" ng-model=location class="form-control" placeholder="Location" tabindex="7">
+            </div>
+            
+            <hr class="colorgraph">
+            <div class="row">
+                    <div class="col-xs-12 col-md-6"><input type="submit" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+                    <div class="col-xs-12 col-md-6"><a href="#" class="btn btn-success btn-block btn-lg">Sign In</a></div>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>

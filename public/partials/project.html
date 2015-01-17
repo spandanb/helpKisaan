@@ -1,0 +1,108 @@
+ <!--
+<h3>Name: {{project.name}}</h3>
+<button ng-hide={{$root.user._id!=project.owner}} class="right" ng-click="deleteProject()">Delete</button>
+<div ng-click="clicked('goal')">
+    <span>Goal: $</span>
+    <span id="goal">{{project.goal}}</span>
+</div>
+
+<div>Funds: ${{project.funds}}</div>
+
+<div>{{project.owner}}</div>
+
+<div>                
+    <form ng-submit="donate()">
+        $<input type="text" placeholder="Amount" ng-model=amount></input>
+        <button type="submit">Give</button>
+    </form>                
+</div>
+-->
+                
+<hr class="">
+<div class="container target">
+    <div class="row">
+        <div class="col-sm-10">
+            <h1 class="">{{project.name}}</h1>
+            <br>
+        </div>
+    </div>
+    <hr class="colorgraph">
+    <br>
+    <div class="row">
+        <!-- left col-->
+        <!-- Modified from http://www.bootply.com/DVDS9uf79e-->
+        <div class="col-sm-7" contenteditable="false" style="">
+            <div class="panel panel-default">
+                <img data-src="holder.js/100%x200" alt="100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxkZWZzLz48cmVjdCB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjkyLjQ2MDkzNzUiIHk9IjEwMCIgc3R5bGU9ImZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMXB0O2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjI0MngyMDA8L3RleHQ+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="height: 400px; width: 100%; display: block;">
+            </div>
+
+           <div class="panel panel-default">
+                <div class="panel-heading">Project Description</div>
+                <div class="panel-body">{{project.description}}</div>
+            </div>
+        </div>
+
+        
+        <!--right col-->
+        <div class="col-sm-5">
+            
+            <!--Pie Chart -->
+            <!-- Modified from http://stackoverflow.com/questions/20525820/css3-simple-donut-chart -->
+            <!--div class="half_pie">
+                <div class="half_part_pie_one half_bar_color half_percentage" data-percentage="95"></div>
+                <div class="half_part_pie_two"></div>
+                <div class="half_part_pie_three"></div>
+                <span class="half_pie_icon iconfont-android"></span>
+            </div-->
+            
+            <!-- Donation Form -->
+            <form ng-submit="donate()">
+                <div class="input-group form-group col-xs-12 col-sm-6 col-md-6">
+                    <div class="input-group-addon">$</div>
+                    <input type="text" ng-model=amount class="form-control"  tabindex="2">
+                </div>
+            
+                <input type="submit" value="Donate" class="btn btn-success ">
+            </form>
+            
+            <ul class="list-group">
+                <li class="list-group-item text-muted" contenteditable="false">Info</li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="">Funds Raised</strong></span>${{project.funds}}
+                </li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="">Goal</strong></span>${{project.goal}}
+                </li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="">Percentage Raised</strong></span>{{progress}}%
+                </li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="">Progress</strong></span>{{progressMsg}}
+                </li>
+            </ul>    
+            
+            <!-- Admin Panel -->
+            <ul class="list-group">
+                <li class="list-group-item text-muted">Admin Panel</li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="">Goal</strong></span>
+                    $<span id="admin-goal" contenteditable="true">{{project.goal}}</span>
+                </li>
+                <li class="list-group-item text-right" ><span class="pull-left">
+                    <strong class="">Description</strong></span>
+                    <span id="admin-description" contenteditable="true">{{project.description}}
+                </li>
+            </ul>    
+            <!--input type="submit" value="Apply Changes" class="btn btn-info"-->
+            <button type="button" class="btn btn-info" ng-click="updateValue('admin-goal', 'admin-description')">Apply Changes</button>
+
+            <!-- 
+            <div class="panel panel-default">
+                <div class="panel-heading">Title</div>
+                    <div class="panel-body"><i style="color:green" class="fa fa-check-square"></i>Foo Bar</div>
+                </div> 
+            </div>
+           -->
+        </div>
+    </div>
+</div>                

@@ -11,7 +11,7 @@ function($stateProvider, $urlRouterProvider){
         url:'/home',
         views:{
             "main":{
-                templateUrl:'/home.html',
+                templateUrl:'/partials/home.html',
                 controller:'MainCtrl',
                 resolve: {
                     postPromise: ['projects', function(projects){
@@ -20,7 +20,7 @@ function($stateProvider, $urlRouterProvider){
                 }
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials/navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){
@@ -35,7 +35,7 @@ function($stateProvider, $urlRouterProvider){
         url:'/projects', 
         views:{
             "main":{
-                templateUrl:'/projects.html',
+                templateUrl:'/partials/projects.html',
                 controller:'MainCtrl',
                 resolve: {
                     postPromise: ['projects', function(projects){
@@ -44,7 +44,7 @@ function($stateProvider, $urlRouterProvider){
                 }
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials/navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){
@@ -60,11 +60,11 @@ function($stateProvider, $urlRouterProvider){
         url:'/new_project', 
         views:{
             "main":{
-                templateUrl:'/new_project.html',
+                templateUrl:'/partials/new_project.html',
                 controller:'MainCtrl',
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials/navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){
@@ -80,7 +80,7 @@ function($stateProvider, $urlRouterProvider){
         url: '/projects/{id}',
         views:{
             "main":{
-                templateUrl:'/project.html',
+                templateUrl:'/partials/project.html',
                 controller:'ProjectsCtrl',
                 resolve: {
                     project: ['$stateParams', 'projects', function($stateParams, projects) {
@@ -89,7 +89,7 @@ function($stateProvider, $urlRouterProvider){
                 }
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials/navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){
@@ -104,11 +104,11 @@ function($stateProvider, $urlRouterProvider){
         url:'/signin',
         views:{
             "main":{
-                templateUrl:'/signin.html',
+                templateUrl:'/partials/signin.html',
                 controller: 'AuthCtrl',
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials//navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){
@@ -123,11 +123,11 @@ function($stateProvider, $urlRouterProvider){
         url:'/register',
         views:{
             "main":{
-                templateUrl:'/register.html',
+                templateUrl:'/partials//register.html',
                 controller: 'AuthCtrl',
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials/navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){
@@ -141,11 +141,11 @@ function($stateProvider, $urlRouterProvider){
         url:'/signout',
         views:{
             "main":{
-                templateUrl:'/register.html',
+                templateUrl:'/partials/register.html',
                 controller: 'AuthCtrl',
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials/navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user_obj: ['auth', function(auth){
@@ -160,11 +160,11 @@ function($stateProvider, $urlRouterProvider){
         url:'/profile',
         views:{
             "main":{
-                templateUrl:'/profile.html',
+                templateUrl:'/partials/profile.html',
                 controller: 'AuthCtrl',
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials/navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){
@@ -179,10 +179,10 @@ function($stateProvider, $urlRouterProvider){
         url:'/about',
         views:{
             "main":{
-                templateUrl:'/about.html',
+                templateUrl:'/partials/about.html',
             },
             "header":{
-                templateUrl:'/navbar.html',
+                templateUrl:'/partials/navbar.html',
                 controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){

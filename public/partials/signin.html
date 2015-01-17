@@ -1,0 +1,59 @@
+
+<!--h3>Sign Up</h3>
+<form ng-submit="signin()">
+    <input type="text" ng-model="username" placeholder="Username" required autofocus>
+    <input type="password" ng-model="password" placeholder="Password" required>
+    <button type="submit">Sign In</button>
+</form-->
+
+<!--  Google style login 
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <div class="account-wall">
+                <div id="my-tab-content" class="tab-content">
+                    <div class="tab-pane active" id="login">
+                        <img class="profile-img" src="/images/user.png" alt="">
+                            <form class="form-signin" ng-submit="signin()">
+                                    <input type="text" class="form-control" ng-model="username" placeholder="Username" required autofocus>
+                                    <input type="password" class="form-control" ng-model="password" placeholder="Password" required>
+                                    
+                                    <hr class="colorgraph">
+                                    <input type="submit" class="btn btn-lg btn-default btn-block btn-success" value="Sign In" />
+                            </form>
+                            <div id="tabs" data-tabs="tabs">
+                                    <p class="text-center"><a href="#/register" data-toggle="tab">Create an Account?</a></p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+            <div class="account-wall-2">
+
+                <h3>Sign In</h3>
+                <hr class="colorgraph">
+                
+                <form role="form" ng-submit="signin()">
+                    <div class="form-group col-xs-12 col-sm-6 col-md-12">
+                        <input type="text" ng-model=username class="form-control" placeholder="Username" tabindex="1">
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6 col-md-12">
+                        <input type="password" ng-model=password class="form-control" placeholder="Password" tabindex="2">
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                                <hr class="colorgraph">
+                                <input type="submit" value="Sign In" class="btn btn-success btn-block btn-lg">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>        
