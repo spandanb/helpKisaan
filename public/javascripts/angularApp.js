@@ -335,33 +335,6 @@ function($scope, $rootScope, projects, project){
     $scope.deleteProject = function(){
         projects.delete($scope.project._id);
     };
-    //Allows owners to modify goal of project
-    $scope.clicked = function(id){
-        if (!id) {return;}
-        //Static tag to be changed
-        var stat = document.getElementById(id);
-        if (!stat) {return;}
-        //New tag
-        var form = document.createElement("form");
-        form.setAttribute("ng-submit", "updateValue()");
-        
-        var inp = document.createElement("input");
-        inp["type"] = "text";
-        inp["value"] = stat.innerHTML;
-        inp["ng-model"] = "goal";
-        form.appendChild(inp);
-        
-        var btn = document.createElement("button");
-        btn["type"] = "submit";
-        btn.innerHTML = "Enter";
-        form.appendChild(btn);
-        
-        //Insert new element
-        stat.parentNode.insertBefore(form, stat);
-        //Remove old element
-        stat.parentNode.removeChild(stat);
-
-    };
     
     $scope.updateValue = function(goalId, descId){
         var newGoal = document.getElementById(goalId).innerText;
