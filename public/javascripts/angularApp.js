@@ -307,9 +307,11 @@ function($http, $location, $state){
 'projects',
 '$rootScope',
 function($scope, projects, $rootScope){
+    
+    
     $scope.projects = projects.projects;
     $scope.addProject = function(){
-        console.log("In add project. Name is: " + $scope.name + ". Goal is: " + $scope.goal);
+        //console.log("In add project. Name is: " + $scope.name + ". Goal is: " + $scope.goal);
         projects.create({
             name:$scope.name,
             goal:$scope.goal,
@@ -335,7 +337,6 @@ function($scope, $rootScope, projects, project){
     };
     //Allows owners to modify goal of project
     $scope.clicked = function(id){
-
         if (!id) {return;}
         //Static tag to be changed
         var stat = document.getElementById(id);
@@ -359,11 +360,23 @@ function($scope, $rootScope, projects, project){
         stat.parentNode.insertBefore(form, stat);
         //Remove old element
         stat.parentNode.removeChild(stat);
+
     };
     
-    $scope.updateValue = function(){
-        //console.log("Here");
-        projects.update($scope.project._id, {"goal":$scope.goal});        
+    $scope.updateValue = function(goalId, descId){
+        var newGoal = document.getElementById(goalId).innerText;
+        var newDesc = document.getElementById(descId).innerText;
+        
+        var updates = {};
+       
+        if(Number(newGoal) !== $scope.project.goal){
+            updates["goal"] = newGoal;
+        }
+        if(newDesc !== $scope.project.desc){
+            updates["description"] = newDesc;
+        }
+        if(Object.keys(updates).length !== 0)
+            projects.update($scope.project._id, updates); 
     }
     
     $scope.donate = function(){
@@ -376,7 +389,15 @@ function($scope, $rootScope, projects, project){
             return;    
         projects.update(project._id, {funds: Number(project.funds + amount)}); 
     }
-    
+   
+    $scope.progress = Math.min(100 * $scope.project.funds / $scope.project.goal, 100);
+    $scope.progressMsg = function(){
+        if(isNaN($scope.progress)) return "";
+        if($scope.progress >= 100)
+            return "Project Completed!";
+        else
+            return String($scope.progress) + "% funded!";
+    }();
 
 }])
 .controller('AuthCtrl',[
