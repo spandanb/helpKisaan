@@ -1,3 +1,8 @@
 
 <h3>Welcome {{user.username}}</h3>
 <div>Email---> {{user.email}} </div>
+
+<form ng-submit="getDist()">
+    <input type="text" ng-model="username" placeholder="location" autofocus>
+    <button type="submit">Get Distance</button>
+</form>

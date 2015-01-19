@@ -152,5 +152,33 @@ module.exports = function(passport){
             res.redirect('/');
     });
     
+    
+    //Direction Matrix
+    router.get('/directions', function(req, res){
+        var https = require('https');
+        var options = {
+            host: "maps.googleapis.com",
+            path: "/maps/api/distancematrix/json?origins=Toronto+Cananda&destinations=Brampton+Canada&key=AIzaSyDjc6ZctgLju0LyWXQCH9yiEPHg2ehk_RY"
+            }; 
+        
+        //Modified from http://stackoverflow.com/questions/9577611
+        var request = https.get(options, function(response) {
+            //console.log('STATUS: ' + res.statusCode);
+            //console.log('HEADERS: ' + JSON.stringify(res.headers));
+            
+            // Buffer the body entirely for processing as a whole.
+            var bodyChunks = [];
+            response.on('data', function(chunk) {
+              // You can process streamed parts here...
+              bodyChunks.push(chunk);
+            }).on('end', function() {
+              var body = Buffer.concat(bodyChunks);
+              //console.log('BODY: ' + body);
+              // ...and/or process the entire body here.
+              res.send(body);
+            })
+        });
+    });
+    
     return router;
 }
