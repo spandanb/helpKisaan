@@ -86,15 +86,19 @@
                 <li class="list-group-item text-muted">Admin Panel</li>
                 <li class="list-group-item text-right">
                     <span class="pull-left"><strong class="">Goal</strong></span>
-                    $<span id="admin-goal" contenteditable="true">{{project.goal}}</span>
+                    $<span id="admin-goal" contenteditable="true">{{project.goal||"Unspecified"}}</span>
                 </li>
                 <li class="list-group-item text-right" ><span class="pull-left">
                     <strong class="">Description</strong></span>
-                    <span id="admin-description" contenteditable="true">{{project.description}}
+                    <span id="admin-description" contenteditable="true">{{project.description||"Unspecified"}}
+                </li>
+                <li class="list-group-item text-right" ><span class="pull-left">
+                    <strong class="">Location</strong></span>
+                    <span id="admin-location" contenteditable="true">{{project.location||"Unspecified"}}
                 </li>
             </ul>    
             <!--input type="submit" value="Apply Changes" class="btn btn-info"-->
-            <button type="button" class="btn btn-info" ng-click="updateValue('admin-goal', 'admin-description')">Apply Changes</button>
+            <button type="button" class="btn btn-info" ng-click="updateValue('admin-goal', 'admin-description', 'admin-location')">Apply Changes</button>
 
             <!-- 
             <div class="panel panel-default">
