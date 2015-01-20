@@ -23,7 +23,10 @@ module.exports = mongoose.model('User',{
 	email: String,
 	firstName: String,
 	lastName: String,
-        isReceiver: Boolean,
-        isSupporter: Boolean,
-        location: String
+    location: String
+
+    //IFSC (Indian Financial System Code) of the beneficiary Bank/Branch
+    //Full account number of the beneficiary
+    //isReceiver: Boolean,
+    //isSupporter: Boolean,
 });

@@ -1,0 +1,197 @@
+'use strict';
+
+angular.module('siaControllers', ['ngResource'])
+.controller('MainCtrl', [
+'$scope',
+'projects',
+'$rootScope',
+function($scope, projects, $rootScope){
+    
+    
+    $scope.projects = projects.projects;
+    $scope.addProject = function(){
+        //console.log("In add project. Name is: " + $scope.name + ". Goal is: " + $scope.goal);
+        projects.create({
+            name:$scope.name,
+            goal:$scope.goal,
+            description: $scope.description, 
+            owner: $rootScope.user._id            
+        });
+        $scope.owner = null;
+        $scope.name = null;
+        $scope.goal = null;
+    }
+
+}])
+.controller('ProjectsCtrl', [
+'$scope',
+'$rootScope',
+'projects',
+'project',
+function($scope, $rootScope, projects, project){
+    $scope.project = project;
+        
+    $scope.deleteProject = function(){
+        projects.delete($scope.project._id);
+    };
+    
+    $scope.updateValue = function(goalId, descId, locId){
+        var newGoal = document.getElementById(goalId).innerText; //Goal
+        var newDesc = document.getElementById(descId).innerText; //Description
+        var newLoc = document.getElementById(locId).innerText; //Location
+        
+        var updates = {};
+       
+        if(Number(newGoal) !== $scope.project.goal){
+            updates["goal"] = newGoal;
+        }
+        if(newDesc !== $scope.project.desc){
+            updates["description"] = newDesc;
+        }
+        if(newLoc !== $scope.project.location){
+            updates["location"] = newLoc;
+        }
+        if(Object.keys(updates).length !== 0)
+            projects.update($scope.project._id, updates); 
+    }
+    
+    $scope.donate = function(){
+        //Check for valid input
+        if (isNaN($scope.amount))
+            return;
+        //Check if number is > 0
+        var amount = Number($scope.amount);
+        if (amount <= 0)
+            return;    
+        projects.update(project._id, {funds: Number(project.funds + amount)}); 
+    }
+   
+    $scope.progress = Math.min(100 * $scope.project.funds / $scope.project.goal, 100);
+    $scope.progressMsg = function(){
+        if(isNaN($scope.progress)) return "";
+        if($scope.progress >= 100)
+            return "Project Completed!";
+        else
+            return String($scope.progress) + "% funded!";
+    }();
+
+}])
+.controller('AuthCtrl',[
+'$scope',
+'$http',
+'$rootScope',
+'$location',
+'$resource',
+function($scope, $http, $rootScope, $location, $resource){
+    
+    $scope.register = function(){
+        $http.post('/signup', {
+                'username': $scope.username,
+                'password': $scope.password,
+                'email': $scope.email
+            }).success(function(res){
+                console.log("Successfully registered user");
+                $rootScope.user = res;
+                //Redirect
+                $location.path('/profile');
+                
+            }).error(function(res){
+                console.log("Error: Unable to register user");
+                console.log(res);
+                $scope.error = "Error: Unable to register user";
+            });
+    }
+    
+    $scope.signin = function(){
+        $http.post('/login', {
+                'username': $scope.username,
+                'password': $scope.password
+            }).success(function(res){
+                console.log("Successfully signed in");                
+                $rootScope.user = res;
+                $location.path('/profile');
+                
+            }).error(function(res){
+                console.log("Error: Unable to signin user");
+                console.log(res);
+                $scope.error = "Error: Unable to signin user";
+            });
+    }
+    
+    $scope.signout = function(){
+        $http.get('/signout').success(function(){
+            console.log("Succesfully signed out!");
+            $rootScope.user = null;
+        });
+    };
+    
+    $scope.getDist = function(){
+        
+        $http.get('/directions').success(function(data){    
+            console.log(JSON.stringify(data));
+            $scope.dist = JSON.stringify(data);            
+        });
+       
+ 
+        /*
+        
+        var url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Toronto+Cananda&destinations=Brampton+Canada&key=AIzaSyDjc6ZctgLju0LyWXQCH9yiEPHg2ehk_RY&callback=JSON_CALLBACK";
+         
+        //Trying to get direction matrix using jsonp 
+        $http.jsonp(url, {"type":"application/json"})
+            .success(function(response) {
+           //console.log(typeof(response))
+           //var foo = JSON.parse(response);
+           //$scope.names = response;
+           //console.log(foo);
+            })
+           .error(function(res){
+            console.log("E");
+            console.log(res);
+           })
+           ;
+        */
+
+
+            /*
+            //With transformResponse function
+            $http({
+            url: url,
+            method: "JSONP",
+            //responseType: "application/javascript"
+            //contentType: "application/json",
+            //dataType: "jsonp",
+            transformResponse: function(data, headers){
+                console.log(data);
+                data = {}
+                data.coolThing = "foo";
+                
+                return data;
+            }
+        });
+        */
+
+        /*
+        //Using $resource
+        var directions = $resource(url, 
+            {callback: "JSON_CALLBACK"}, 
+            { get: {method:"JSONP"}});
+        var foo = directions.get();
+        console.log(foo);
+        */
+    }
+}])
+.controller('HeaderCtrl', [
+'$scope',    
+'$rootScope',
+'auth',
+'user',
+function($scope, $rootScope, auth, user){
+    //Sets $rootScope.user if user still logged in 
+    $rootScope.user = user;    
+    
+    $scope.signout = function(){
+        auth.signout();
+    };
+}])
+;

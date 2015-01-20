@@ -1,14 +1,36 @@
+Bare Install
+============
+Install git, curl
+
+Install npm
+    curl https://raw.githubusercontent.com/creationix/nvm/v0.23.0/install.sh | bash
+    See: https://github.com/creationix/nvm
+
+Install node
+    Should be installed with npm
+    Check if installed with: 
+        nvm ls-remote
+
+Install express
+
+Install mongodb
+    GUI-environment: Download installer: http://www.mongodb.org/downloads
+    Ubuntu CL: sudo apt-get install mongodb-org
+
+
+To Start App
+============
+
 To run monodb
     <<PATH TO mongod>>/mongod --dbpath <<data file>>
     e.g.
     ./bin/mongod --dbpath data
 
-To install dependencies
+To install server side dependencies
     npm install
 
 To start application
     npm start
-
 
 
 Note:
