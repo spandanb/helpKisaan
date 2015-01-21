@@ -1,6 +1,28 @@
 'use strict';
 
-angular.module('siaControllers', ['ngResource'])
+angular.module('siaControllers', ['ngResource',
+                       'pascalprecht.translate'])
+.config(function ($translateProvider) {
+  $translateProvider.translations('en', {
+    NAV_HOME: 'Home',
+    NAV_PROJECTS: 'Projects',
+    NAV_ABOUT: 'About',
+    NAV_REGISTER: 'Register',
+    NAV_SIGNIN: 'Sign In',
+    NAV_NEW_PROJ: 'New Project',
+    NAV_LOG_OUT: "Log Out",
+  });
+  $translateProvider.translations('hi', {
+    NAV_HOME: 'घर', //Ghar
+    NAV_PROJECTS: 'परियोजना', //Pariyogana
+    NAV_ABOUT: 'बारे में', //Barey main
+    NAV_REGISTER: 'नया खाता', //Naya Khata
+    NAV_SIGNIN: 'साइन इन', //Sign in
+    NAV_NEW_PROJ: 'नई परियोजना', //Nai pariyogna
+    NAV_LOG_OUT: "लॉग आउट", //Log out
+  });
+  $translateProvider.preferredLanguage('en');
+})
 .controller('MainCtrl', [
 '$scope',
 'projects',
@@ -186,12 +208,37 @@ function($scope, $http, $rootScope, $location, $resource){
 '$rootScope',
 'auth',
 'user',
-function($scope, $rootScope, auth, user){
+'$translate',
+function($scope, $rootScope, auth, user, $translate){
     //Sets $rootScope.user if user still logged in 
     $rootScope.user = user;    
     
     $scope.signout = function(){
         auth.signout();
     };
+    
+    
+    $scope.changeLanguage = function (lang) {
+        $translate.use(lang);
+        $rootScope.lang = lang;   
+    };
+    
+    //Translate entire header bar
+    $translate(['NAV_HOME',
+        'NAV_PROJECTS',
+        'NAV_ABOUT',
+        'NAV_REGISTER',
+        'NAV_SIGNIN',
+        'NAV_NEW_PROJ',
+        'NAV_LOG_OUT']).then(function (translation) {
+        $scope.home = translation['NAV_HOME'];
+        $scope.projects = translation['NAV_PROJECTS'],
+        $scope.about = translation['NAV_ABOUT'],
+        $scope.register = translation['NAV_REGISTER'],
+        $scope.signin = translation['NAV_SIGNIN'],
+        $scope.new_proj = translation['NAV_NEW_PROJ'],
+        $scope.log_out = translation['NAV_LOG_OUT']
+    });
+    
 }])
 ;
