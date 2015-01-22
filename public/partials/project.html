@@ -65,6 +65,10 @@
                 <input type="submit" value="Donate" class="btn btn-success ">
             </form>
             
+            <a href="http://www.hdfcbank.com/personal/making-payments/fund-transfer/emonies-national-electronic-funds-transfer">HDFC</a>
+            <a href="http://www.unionbankofindia.co.in/personal_bill_neft.aspx">Union Bank</a>
+            <a href="http://www.icicibank.com/Personal-Banking/onlineservice/online-services/FundsTransfer/neft.page?">ICICI</a>
+            
             <ul class="list-group">
                 <li class="list-group-item text-muted" contenteditable="false">Info</li>
                 <li class="list-group-item text-right">
@@ -82,24 +86,31 @@
             </ul>    
             
             <!-- Admin Panel -->
-            <ul class="list-group">
-                <li class="list-group-item text-muted">Admin Panel</li>
-                <li class="list-group-item text-right">
-                    <span class="pull-left"><strong class="">Goal</strong></span>
-                    $<span id="admin-goal" contenteditable="true">{{project.goal||"Unspecified"}}</span>
-                </li>
-                <li class="list-group-item text-right" ><span class="pull-left">
-                    <strong class="">Description</strong></span>
-                    <span id="admin-description" contenteditable="true">{{project.description||"Unspecified"}}
-                </li>
-                <li class="list-group-item text-right" ><span class="pull-left">
-                    <strong class="">Location</strong></span>
-                    <span id="admin-location" contenteditable="true">{{project.location||"Unspecified"}}
-                </li>
-            </ul>    
-            <!--input type="submit" value="Apply Changes" class="btn btn-info"-->
-            <button type="button" class="btn btn-info" ng-click="updateValue('admin-goal', 'admin-description', 'admin-location')">Apply Changes</button>
-
+            <div ng-hide={{$root.user._id!=project.owner}}>
+                <ul class="list-group">
+                    <li class="list-group-item text-muted">Admin Panel</li>
+                    <li class="list-group-item text-right">
+                        <span class="pull-left"><strong class="">Name</strong></span>
+                        <span id="admin-name" contenteditable="true">{{project.name||"Unspecified"}}</span>
+                    </li>
+                    <li class="list-group-item text-right">
+                        <span class="pull-left"><strong class="">Goal</strong></span>
+                        $<span id="admin-goal" contenteditable="true">{{project.goal||"Unspecified"}}</span>
+                    </li>
+                    <li class="list-group-item text-right" ><span class="pull-left">
+                        <strong class="">Description</strong></span>
+                        <span id="admin-description" contenteditable="true">{{project.description||"Unspecified"}}
+                    </li>
+                    <li class="list-group-item text-right" ><span class="pull-left">
+                        <strong class="">Location</strong></span>
+                        <span id="admin-location" contenteditable="true">{{project.location||"Unspecified"}}
+                    </li>
+                </ul>    
+                <!--input type="submit" value="Apply Changes" class="btn btn-info"-->
+                <button type="button" class="btn btn-info" ng-click="updateValue()">Apply Changes</button>
+    
+                <button ng-hide={{$root.user._id!=project.owner}} class="btn btn-danger" ng-click="deleteProject()">Delete Project</button>
+            </div>
             <!-- 
             <div class="panel panel-default">
                 <div class="panel-heading">Title</div>

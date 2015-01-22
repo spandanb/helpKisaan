@@ -57,13 +57,19 @@ function($scope, $rootScope, projects, project){
         projects.delete($scope.project._id);
     };
     
-    $scope.updateValue = function(goalId, descId, locId){
-        var newGoal = document.getElementById(goalId).innerText; //Goal
-        var newDesc = document.getElementById(descId).innerText; //Description
-        var newLoc = document.getElementById(locId).innerText; //Location
+    $scope.updateValue = function(){
+        var newName = document.getElementById("admin-name").innerText; //Name
+        var newGoal = document.getElementById("admin-goal").innerText; //Goal
+        var newDesc = document.getElementById("admin-description").innerText; //Description
+        var newLoc = document.getElementById("admin-location").innerText; //Location
         
         var updates = {};
        
+        console.log(newName);
+       
+        if(newName !== $scope.project.name){
+            updates["name"] = newName;
+        }
         if(Number(newGoal) !== $scope.project.goal){
             updates["goal"] = newGoal;
         }
@@ -218,6 +224,7 @@ function($scope, $rootScope, auth, user, $translate){
     };
     
     
+    $translate.use("hi");
     $scope.changeLanguage = function (lang) {
         $translate.use(lang);
         $rootScope.lang = lang;   
