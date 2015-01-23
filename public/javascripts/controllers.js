@@ -11,6 +11,22 @@ angular.module('siaControllers', ['ngResource',
     NAV_SIGNIN: 'Sign In',
     NAV_NEW_PROJ: 'New Project',
     NAV_LOG_OUT: "Log Out",
+
+    PROJ_FUNDS_RAISED : "Funds Raised",
+    PROJ_GOAL : "Goal",
+    PROJ_PROGRESS : "Progress",
+    PROJ_MSG_IN_PROGRESS : "Percentage Raised",
+    PROJ_MSG_SUCCESS : "Project Complete",
+
+    PROJ_NAME : "Name",
+    PROJ_DESCRIPTION : "Description",
+    PROJ_LOCATION : "Location",
+
+    PROJ_DONATE : "Donate",
+    PROJ_APPLY_CHANGES : "Apply Changes",
+    PROJ_DELETE_PROJECT : "Delete Project",
+    PROJ_ADMIN_PANEL : "Admin Panel",
+    PROJ_INFO : "Info",
   });
   $translateProvider.translations('hi', {
     NAV_HOME: 'घर', //Ghar
@@ -20,6 +36,22 @@ angular.module('siaControllers', ['ngResource',
     NAV_SIGNIN: 'साइन इन', //Sign in
     NAV_NEW_PROJ: 'नई परियोजना', //Nai pariyogna
     NAV_LOG_OUT: "लॉग आउट", //Log out
+    
+    PROJ_FUNDS_RAISED : "रकम जुटाई",//rakam jootai
+    PROJ_GOAL : "लक्ष्य",//lakshay
+    PROJ_PROGRESS : "प्रगति", //Poorgati
+    PROJ_MSG_IN_PROGRESS : "प्रगति का प्रतिशत", //Pragati ka pratishak,
+    PROJ_MSG_SUCCESS : "परियोजना पूरी", //Pariyojna Poori
+
+    PROJ_NAME : "नाम",
+    PROJ_DESCRIPTION : "विवरण",//vivaran
+    PROJ_LOCATION : "स्थान", //sthan
+    
+    PROJ_DONATE : "हाथ बढ़ाना", //Hath Badana
+    PROJ_APPLY_CHANGES : "परिवर्तन लागू करें",//Parivartan Lagu Karein
+    PROJ_DELETE_PROJECT : "हटाएं", //Hataye
+    PROJ_ADMIN_PANEL : "व्यवस्थापक पैनल", //Vyavasthāpaka painala
+    PROJ_INFO : "जानकारी", //Jaankaari
   });
   $translateProvider.preferredLanguage('en');
 })
@@ -49,7 +81,9 @@ function($scope, projects, $rootScope){
 '$rootScope',
 'projects',
 'project',
-function($scope, $rootScope, projects, project){
+'$translate',
+'$window',
+function($scope, $rootScope, projects, project, $translate, $window){
     $scope.project = project;
         
     $scope.deleteProject = function(){
@@ -63,9 +97,6 @@ function($scope, $rootScope, projects, project){
         var newLoc = document.getElementById("admin-location").innerText; //Location
         
         var updates = {};
-       
-        console.log(newName);
-       
         if(newName !== $scope.project.name){
             updates["name"] = newName;
         }
@@ -84,6 +115,7 @@ function($scope, $rootScope, projects, project){
     
     //Method to handle donate    
     $scope.donate = function(){
+        console.log("In here");
         //Check for valid input
         if (isNaN($scope.amount))
             return;
@@ -91,11 +123,26 @@ function($scope, $rootScope, projects, project){
         var amount = Number($scope.amount);
         if (amount <= 0)
             return;    
-        projects.update(project._id, {funds: Number(project.funds + amount)}); 
+        projects.update(project._id, {funds: Number(project.funds + amount)});
+        
+        var bankUrl = function(){
+            switch($scope.bank){
+                case "icici":
+                    return "http://www.icicibank.com/Personal-Banking/onlineservice/online-services/FundsTransfer/neft.page?";
+                case "hdfc":
+                    return "http://www.hdfcbank.com/personal/making-payments/fund-transfer/emonies-national-electronic-funds-transfer";
+                case "union":
+                    return "http://www.unionbankofindia.co.in/personal_bill_neft.aspx";
+                default :
+                    return ""; 
+            }
+        }();
+        //Handle redirect
+        $window.open(bankUrl, '_blank'); 
     }
     
     //variable for progress percent
-    $scope.progress = Math.min(100 * $scope.project.funds / $scope.project.goal, 100);
+    $scope.progress = Math.min(100 * $scope.project.funds / $scope.project.goal, 100).toFixed(2);
     
     //variable for progress message
     $scope.progressMsg = function(){
@@ -105,6 +152,10 @@ function($scope, $rootScope, projects, project){
         else
             return String($scope.progress) + "% funded!";
     }();
+
+    $scope.bankSelect = function(bank){
+        $scope.bank = bank;
+    }
     
     //Checks if current user has permission to edit project
     $scope.isEditable = function(){
@@ -237,30 +288,11 @@ function($scope, $rootScope, auth, user, $translate){
     $scope.signout = function(){
         auth.signout();
     };
-    
-    
-    //$translate.use("hi");
-    $scope.changeLanguage = function (lang) {
+   
+    $scope.changelang = function (lang) {
+        //console.log("Changing to lang: " + lang);
         $translate.use(lang);
-        $rootScope.lang = lang;   
     };
-    
-    //Translate entire header bar
-    $translate(['NAV_HOME',
-        'NAV_PROJECTS',
-        'NAV_ABOUT',
-        'NAV_REGISTER',
-        'NAV_SIGNIN',
-        'NAV_NEW_PROJ',
-        'NAV_LOG_OUT']).then(function (translation) {
-        $scope.home = translation['NAV_HOME'];
-        $scope.projects = translation['NAV_PROJECTS'],
-        $scope.about = translation['NAV_ABOUT'],
-        $scope.register = translation['NAV_REGISTER'],
-        $scope.signin = translation['NAV_SIGNIN'],
-        $scope.new_proj = translation['NAV_NEW_PROJ'],
-        $scope.log_out = translation['NAV_LOG_OUT']
-    });
     
 }])
 ;

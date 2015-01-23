@@ -37,7 +37,7 @@
             </div>
 
            <div class="panel panel-default">
-                <div class="panel-heading">Project Description</div>
+                <div class="panel-heading">{{description}}</div>
                 <div class="panel-body">{{project.description}}</div>
             </div>
         </div>
@@ -56,61 +56,64 @@
             </div-->
             
             <!-- Donation Form -->
-            <form ng-submit="donate()">
+            <form ng-submit="donate()" id="donation_form">
                 <div class="input-group form-group col-xs-12 col-sm-6 col-md-6">
-                    <div class="input-group-addon">$</div>
+                    <div class="input-group-addon">₹</div>
                     <input type="text" ng-model=amount class="form-control"  tabindex="2">
                 </div>
-            
-                <input type="submit" value="Donate" class="btn btn-success ">
+
+             <p>Select Your Bank </p> 
+                <div class="radio">
+                  <label><input type="radio" ng-model="bank" value="hdfc">HDFC</label>
+                </div>
+                <div class="radio">
+                  <label><input type="radio" ng-model="bank" value="union">Union Bank</label>
+                </div>
+                <div class="radio">
+                  <label><input type="radio" ng-model="bank" value="icici">ICICI</label>
+                </div>
+
+                <input type="submit" value="{{'PROJ_DONATE' | translate }}" class="btn btn-success ">
             </form>
-            
-            <a href="http://www.hdfcbank.com/personal/making-payments/fund-transfer/emonies-national-electronic-funds-transfer">HDFC</a>
-            <a href="http://www.unionbankofindia.co.in/personal_bill_neft.aspx">Union Bank</a>
-            <a href="http://www.icicibank.com/Personal-Banking/onlineservice/online-services/FundsTransfer/neft.page?">ICICI</a>
-            
+           
             <ul class="list-group">
-                <li class="list-group-item text-muted" contenteditable="false">Info</li>
+                <li class="list-group-item text-muted" contenteditable="false" translate>PROJ_INFO</li>
                 <li class="list-group-item text-right">
-                    <span class="pull-left"><strong class="">Funds Raised</strong></span>${{project.funds}}
+                    <span class="pull-left"><strong class="" translate>PROJ_FUNDS_RAISED</strong></span>₹{{project.funds}}
                 </li>
                 <li class="list-group-item text-right">
-                    <span class="pull-left"><strong class="">Goal</strong></span>${{project.goal}}
+                    <span class="pull-left"><strong class="" translate>PROJ_GOAL</strong></span>₹{{project.goal}}
                 </li>
                 <li class="list-group-item text-right">
-                    <span class="pull-left"><strong class="">Percentage Raised</strong></span>{{progress}}%
-                </li>
-                <li class="list-group-item text-right">
-                    <span class="pull-left"><strong class="">Progress</strong></span>{{progressMsg}}
+                    <span class="pull-left"><strong class="" translate>PROJ_PROGRESS</strong></span>{{progress}}%
                 </li>
             </ul>    
             
             <!-- Admin Panel -->
-            <!--div ng-hide={{$root.user._id!=project.owner}}-->
             <div ng-show=isEditable()>
                 <ul class="list-group">
-                    <li class="list-group-item text-muted">Admin Panel</li>
+                    <li class="list-group-item text-muted" translate>PROJ_ADMIN_PANEL</li>
                     <li class="list-group-item text-right">
-                        <span class="pull-left"><strong class="">Name</strong></span>
+                        <span class="pull-left"><strong class="" translate>PROJ_NAME</strong></span>
                         <span id="admin-name" contenteditable="true">{{project.name||"Unspecified"}}</span>
                     </li>
                     <li class="list-group-item text-right">
-                        <span class="pull-left"><strong class="">Goal</strong></span>
-                        $<span id="admin-goal" contenteditable="true">{{project.goal||"Unspecified"}}</span>
+                        <span class="pull-left"><strong class=""translate>PROJ_GOAL</strong></span>
+                        ₹<span id="admin-goal" contenteditable="true">{{project.goal||"Unspecified"}}</span>
                     </li>
                     <li class="list-group-item text-right" ><span class="pull-left">
-                        <strong class="">Description</strong></span>
+                        <strong class=""translate>PROJ_DESCRIPTION</strong></span>
                         <span id="admin-description" contenteditable="true">{{project.description||"Unspecified"}}
                     </li>
                     <li class="list-group-item text-right" ><span class="pull-left">
-                        <strong class="">Location</strong></span>
+                        <strong class="" translate>PROJ_LOCATION</strong></span>
                         <span id="admin-location" contenteditable="true">{{project.location||"Unspecified"}}
                     </li>
                 </ul>    
                 <!--input type="submit" value="Apply Changes" class="btn btn-info"-->
-                <button type="button" class="btn btn-info" ng-click="updateValue()">Apply Changes</button>
+                <button type="button" class="btn btn-info" ng-click="updateValue()" translate>PROJ_APPLY_CHANGES</button>
     
-                <button  class="btn btn-danger" ng-click="deleteProject()">Delete Project</button>
+                <button  class="btn btn-danger" ng-click="deleteProject()" translate>PROJ_DELETE_PROJECT</button>
             </div>
             <!-- 
             <div class="panel panel-default">
