@@ -17,16 +17,12 @@ mongoose.model('User', UserSchema);
 */
 
 module.exports = mongoose.model('User',{
-	id: String,
-	username: String,
-	password: String,
+    id: String,
+    firstname: String,
+    lastname: String,
+    location: String,
+    ifsc: String, //IFSC (Indian Financial System Code) of the beneficiary Bank/Branch
+    acctnumber: String, //Full account number of the beneficiary
+	password: String,	
 	email: String,
-	firstName: String,
-	lastName: String,
-    location: String
-
-    //IFSC (Indian Financial System Code) of the beneficiary Bank/Branch
-    //Full account number of the beneficiary
-    //isReceiver: Boolean,
-    //isSupporter: Boolean,
 });

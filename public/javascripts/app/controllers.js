@@ -29,15 +29,14 @@ angular.module('siaControllers', ['ngResource',
 '$rootScope',
 function($scope, projects, $rootScope){
     
-    
     $scope.projects = projects.projects;
     $scope.addProject = function(){
-        //console.log("In add project. Name is: " + $scope.name + ". Goal is: " + $scope.goal);
         projects.create({
             name:$scope.name,
             goal:$scope.goal,
             description: $scope.description, 
-            owner: $rootScope.user._id            
+            owner: $rootScope.user._id,
+            location: $scope.location,
         });
         $scope.owner = null;
         $scope.name = null;
@@ -83,6 +82,7 @@ function($scope, $rootScope, projects, project){
             projects.update($scope.project._id, updates); 
     }
     
+    //Method to handle donate    
     $scope.donate = function(){
         //Check for valid input
         if (isNaN($scope.amount))
@@ -93,8 +93,11 @@ function($scope, $rootScope, projects, project){
             return;    
         projects.update(project._id, {funds: Number(project.funds + amount)}); 
     }
-   
+    
+    //variable for progress percent
     $scope.progress = Math.min(100 * $scope.project.funds / $scope.project.goal, 100);
+    
+    //variable for progress message
     $scope.progressMsg = function(){
         if(isNaN($scope.progress)) return "";
         if($scope.progress >= 100)
@@ -102,6 +105,13 @@ function($scope, $rootScope, projects, project){
         else
             return String($scope.progress) + "% funded!";
     }();
+    
+    //Checks if current user has permission to edit project
+    $scope.isEditable = function(){
+        //check if user is owner || admin
+        return $rootScope.user._id === project.owner
+                    || $rootScope.user.isAdmin;
+    }
 
 }])
 .controller('AuthCtrl',[
@@ -114,9 +124,14 @@ function($scope, $http, $rootScope, $location, $resource){
     
     $scope.register = function(){
         $http.post('/signup', {
-                'username': $scope.username,
                 'password': $scope.password,
-                'email': $scope.email
+                'email': $scope.email,
+                'location':$scope.location,
+                'ifsc': $scope.ifsc,
+                //'acctnumber': $scope.acctnumber,
+                'username': $scope.acctnumber,
+                'firstname': $scope.firstname,
+                'lastname': $scope.lastname,
             }).success(function(res){
                 console.log("Successfully registered user");
                 $rootScope.user = res;
@@ -132,7 +147,7 @@ function($scope, $http, $rootScope, $location, $resource){
     
     $scope.signin = function(){
         $http.post('/login', {
-                'username': $scope.username,
+                'username': $scope.acctnumber,
                 'password': $scope.password
             }).success(function(res){
                 console.log("Successfully signed in");                
@@ -224,7 +239,7 @@ function($scope, $rootScope, auth, user, $translate){
     };
     
     
-    $translate.use("hi");
+    //$translate.use("hi");
     $scope.changeLanguage = function (lang) {
         $translate.use(lang);
         $rootScope.lang = lang;   

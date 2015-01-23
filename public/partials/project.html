@@ -86,7 +86,8 @@
             </ul>    
             
             <!-- Admin Panel -->
-            <div ng-hide={{$root.user._id!=project.owner}}>
+            <!--div ng-hide={{$root.user._id!=project.owner}}-->
+            <div ng-show=isEditable()>
                 <ul class="list-group">
                     <li class="list-group-item text-muted">Admin Panel</li>
                     <li class="list-group-item text-right">
@@ -109,7 +110,7 @@
                 <!--input type="submit" value="Apply Changes" class="btn btn-info"-->
                 <button type="button" class="btn btn-info" ng-click="updateValue()">Apply Changes</button>
     
-                <button ng-hide={{$root.user._id!=project.owner}} class="btn btn-danger" ng-click="deleteProject()">Delete Project</button>
+                <button  class="btn btn-danger" ng-click="deleteProject()">Delete Project</button>
             </div>
             <!-- 
             <div class="panel panel-default">

@@ -30,12 +30,18 @@ var requireAuth = function(req, res, next){
 }
 
 //Check if logged in user is project owner
-var isOwner = function(req, res, next){
+//var isOwner = function(req, res, next){
+var canModify = function(req, res, next){
 
+  //Check if user is owner 
+  var isOwner = function(user, project){
+     return String(user._id) !== String(project.owner);
+  }
+  
   if(!req.isAuthenticated()){
     req.session.messages = "You need to login to view this page";
     res.status(404).send('Page Not Found.');
-  }else if(String(req.user._id) != String(req.project.owner)){
+  }else if(!isOwner(req.user, req.project) && !isAdmin(req.user)){
     req.session.messages = "Unauthorized request";
     res.status(404).send('Page Not Found.');
   }
@@ -44,6 +50,10 @@ var isOwner = function(req, res, next){
   }
 }
 
+//Check if user is admin
+var isAdmin = function(user){
+  return user.acctnumber === "12345";
+}
 
 module.exports = function(passport){
     
@@ -103,7 +113,7 @@ module.exports = function(passport){
     
     
     /*Update a project*/
-    router.put('/projects/:project', isOwner, function(req, res, next){    
+    router.put('/projects/:project', canModify, function(req, res, next){    
         //Updates the properties
         for(var property in req.body){
             req.project[property] = req.body[property]     
@@ -117,7 +127,7 @@ module.exports = function(passport){
     });
     
     /*Delete a project*/
-    router.delete('/projects/:project', isOwner, function(req, res, next) {    
+    router.delete('/projects/:project', canModify, function(req, res, next) {    
       //Delete project
       req.project.remove();
       //Send response
@@ -137,7 +147,13 @@ module.exports = function(passport){
     //Checks if logged in
     //TODO: what if user intercepts incoming responses and modifies them
     router.get('/loggedin', function(req, res) {
-        res.send(req.isAuthenticated() ? req.user : '0');
+        if(req.isAuthenticated()){
+          var user = req.user.toJSON();
+          user.isAdmin = isAdmin(user); 
+          res.send(user);
+        }else{
+          res.send('0');
+        }
     }); 
     
     //Login
