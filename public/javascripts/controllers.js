@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('siaControllers', ['ngResource',
+angular.module('siaControllers', [
                        'pascalprecht.translate'])
 .config(function ($translateProvider) {
   $translateProvider.translations('en', {
@@ -171,10 +171,9 @@ function($scope, $rootScope, projects, project, $translate, $window){
 '$http',
 '$rootScope',
 '$location',
-'$resource',
 '$translate',
 '$state',
-function($scope, $http, $rootScope, $location, $resource, $translate, $state){
+function($scope, $http, $rootScope, $location, $translate, $state){
     
     $scope.register = function(){
         $http.post('/signup', {
