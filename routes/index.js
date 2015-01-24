@@ -107,8 +107,21 @@ module.exports = function(passport){
     });
     
     /*Get a single project*/
-    router.get('/projects/:project', function(req, res) {
-      res.json(req.project);
+    router.get('/projects/:project', function(req, res, next) {
+        var project = req.project.toJSON(); 
+        
+        //Attach user object to project
+        var query = User.findById(req.project.owner);
+        query.exec(function (err, user){
+            if (err || !user) { 
+                //If no user or error, send project
+                return res.json(project); 
+            }
+            project.owner = user.toJSON();
+            //Else, send project with owner
+            res.json(project);      
+        });        
+        //res.json(project);
     });
     
     
@@ -133,7 +146,36 @@ module.exports = function(passport){
       //Send response
       res.send("Deleted project with id: " + req.project._id);
     });
+   
+
+    /***********************************************
+     *******************USER************************
+     ***********************************************/
+
+    /*Preload a user*/
+    router.param('user', function(req, res, next, id) {
+      var query = User.findById(id);
+      query.exec(function (err, user){
+        if (err) { return next(err); }
+        if (!user) { return next(new Error("can't find user")); }
     
+        req.user = user;
+        return next();
+      });
+    });
+
+    /*Update a user*/
+    router.put('/users/:user', function(req, res, next) {
+        //Updates the properties
+        for(var property in req.body){
+            req.user[property] = req.body[property]     
+        }
+        //Save the document
+        req.user.save(function(err, user){
+            if(err){ return next(err); }
+            res.json(user);
+        });
+    });
     /***********************************************
      *****************PASSPORT**********************
      ***********************************************/

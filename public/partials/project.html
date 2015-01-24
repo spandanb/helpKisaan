@@ -87,6 +87,15 @@
                 <li class="list-group-item text-right">
                     <span class="pull-left"><strong class="" translate>PROJ_PROGRESS</strong></span>{{progress}}%
                 </li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="" translate>PROJ_LOCATION</strong></span>{{project.owner.location}}
+                </li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="" translate>USER_ACCT_NUMBER</strong></span>{{project.owner.acctnumber}}
+                </li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="" translate>USER_IFSC</strong></span>{{project.owner.ifsc}}
+                </li>
             </ul>    
             
             <!-- Admin Panel -->
@@ -104,10 +113,6 @@
                     <li class="list-group-item text-right" ><span class="pull-left">
                         <strong class=""translate>PROJ_DESCRIPTION</strong></span>
                         <span id="admin-description" contenteditable="true">{{project.description||"Unspecified"}}
-                    </li>
-                    <li class="list-group-item text-right" ><span class="pull-left">
-                        <strong class="" translate>PROJ_LOCATION</strong></span>
-                        <span id="admin-location" contenteditable="true">{{project.location||"Unspecified"}}
                     </li>
                 </ul>    
                 <!--input type="submit" value="Apply Changes" class="btn btn-info"-->

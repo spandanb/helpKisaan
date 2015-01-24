@@ -75,13 +75,11 @@ function($scope, projects, $rootScope){
             goal:$scope.goal,
             description: $scope.description, 
             owner: $rootScope.user._id,
-            location: $scope.location,
         });
         $scope.owner = null;
         $scope.name = null;
         $scope.goal = null;
     }
-
 }])
 .controller('ProjectsCtrl', [
 '$scope',
@@ -92,7 +90,7 @@ function($scope, projects, $rootScope){
 '$window',
 function($scope, $rootScope, projects, project, $translate, $window){
     $scope.project = project;
-        
+    console.log($scope.project);    
     $scope.deleteProject = function(){
         projects.delete($scope.project._id);
     };
@@ -101,7 +99,6 @@ function($scope, $rootScope, projects, project, $translate, $window){
         var newName = document.getElementById("admin-name").innerText; //Name
         var newGoal = document.getElementById("admin-goal").innerText; //Goal
         var newDesc = document.getElementById("admin-description").innerText; //Description
-        var newLoc = document.getElementById("admin-location").innerText; //Location
         
         var updates = {};
         if(newName !== $scope.project.name){
@@ -112,9 +109,6 @@ function($scope, $rootScope, projects, project, $translate, $window){
         }
         if(newDesc !== $scope.project.desc){
             updates["description"] = newDesc;
-        }
-        if(newLoc !== $scope.project.location){
-            updates["location"] = newLoc;
         }
         if(Object.keys(updates).length !== 0)
             projects.update($scope.project._id, updates); 
@@ -179,7 +173,8 @@ function($scope, $rootScope, projects, project, $translate, $window){
 '$location',
 '$resource',
 '$translate',
-function($scope, $http, $rootScope, $location, $resource, $translate){
+'$state',
+function($scope, $http, $rootScope, $location, $resource, $translate, $state){
     
     $scope.register = function(){
         $http.post('/signup', {
@@ -187,7 +182,6 @@ function($scope, $http, $rootScope, $location, $resource, $translate){
                 'email': $scope.email,
                 'location':$scope.location,
                 'ifsc': $scope.ifsc,
-                //'acctnumber': $scope.acctnumber,
                 'username': $scope.acctnumber,
                 'firstname': $scope.firstname,
                 'lastname': $scope.lastname,
@@ -233,54 +227,27 @@ function($scope, $http, $rootScope, $location, $resource, $translate){
             console.log(JSON.stringify(data));
             $scope.dist = JSON.stringify(data);            
         });
-       
- 
-        /*
-        
-        var url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Toronto+Cananda&destinations=Brampton+Canada&key=AIzaSyDjc6ZctgLju0LyWXQCH9yiEPHg2ehk_RY&callback=JSON_CALLBACK";
-         
-        //Trying to get direction matrix using jsonp 
-        $http.jsonp(url, {"type":"application/json"})
-            .success(function(response) {
-           //console.log(typeof(response))
-           //var foo = JSON.parse(response);
-           //$scope.names = response;
-           //console.log(foo);
-            })
-           .error(function(res){
-            console.log("E");
-            console.log(res);
-           })
-           ;
-        */
+    }
 
-
-            /*
-            //With transformResponse function
-            $http({
-            url: url,
-            method: "JSONP",
-            //responseType: "application/javascript"
-            //contentType: "application/json",
-            //dataType: "jsonp",
-            transformResponse: function(data, headers){
-                console.log(data);
-                data = {}
-                data.coolThing = "foo";
-                
-                return data;
+    $scope.updateUser = function(){
+        var properties= ["ifsc", "acctnumber", "email", "firstname", "lastname", "location"];
+        var updates = {};
+        for(var i=0; i<properties.length; i++){
+            var newValue = document.getElementById("user-" + properties[i]).innerText;
+            var oldValue = $rootScope.user[properties[i]];
+            if(oldValue !== newValue && !!newValue){
+                updates[properties[i]] = newValue;
             }
-        });
-        */
-
-        /*
-        //Using $resource
-        var directions = $resource(url, 
-            {callback: "JSON_CALLBACK"}, 
-            { get: {method:"JSONP"}});
-        var foo = directions.get();
-        console.log(foo);
-        */
+        }
+        if(Object.keys(updates).length !== 0){
+            $http.put("/users/" + $rootScope.user._id, updates)
+            .success(function(res){
+                //console.log("Post Successful");
+                $state.reload();
+            }).error(function(res){
+                //console.log("Fail");
+            }); 
+        }
     }
 }])
 .controller('HeaderCtrl', [
