@@ -34,7 +34,7 @@ Install mongodb
 
         Runs as service:
             sudo service mongodb start
-            sudo service mongodb service
+            sudo service mongodb status
             sudo service mongodb stop
         
 

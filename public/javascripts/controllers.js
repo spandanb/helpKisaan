@@ -27,6 +27,13 @@ angular.module('siaControllers', ['ngResource',
     PROJ_DELETE_PROJECT : "Delete Project",
     PROJ_ADMIN_PANEL : "Admin Panel",
     PROJ_INFO : "Info",
+
+    USER_ACCT_NUMBER : "Account Number",
+    USER_IFSC : "Indian Financial System Code",
+    USER_FIRST_NAME: "First Name",
+    USER_LAST_NAME: "Last Name",
+    USER_LOCATION: "Location",
+    USER_EMAIL: "Email",
   });
   $translateProvider.translations('hi', {
     NAV_HOME: 'घर', //Ghar
@@ -171,7 +178,8 @@ function($scope, $rootScope, projects, project, $translate, $window){
 '$rootScope',
 '$location',
 '$resource',
-function($scope, $http, $rootScope, $location, $resource){
+'$translate',
+function($scope, $http, $rootScope, $location, $resource, $translate){
     
     $scope.register = function(){
         $http.post('/signup', {
@@ -292,6 +300,7 @@ function($scope, $rootScope, auth, user, $translate){
     $scope.changelang = function (lang) {
         //console.log("Changing to lang: " + lang);
         $translate.use(lang);
+        $rootScope.lang = lang;
     };
     
 }])

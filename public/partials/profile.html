@@ -1,11 +1,33 @@
-
-<h3>Welcome {{user.firstName}}</h3>
-<div>Last Name---> {{user.lastname}} </div>
-<div>IFSC---> {{user.ifsc}} </div>
-<div>Account Number---> {{user.username}} </div>
-<div>Location ---> {{user.location}} </div>
-<div>Email---> {{user.email}} </div>
-
+ <div class="col-sm-5">
+         <ul class="list-group">
+             <li class="list-group-item text-muted" translate>PROJ_INFO</li>
+             <li class="list-group-item text-right">
+                 <span class="pull-left"><strong class="" translate>USER_FIRST_NAME</strong></span>
+                 <span id="user-firstname" contenteditable="true">{{user.firstname}}</span>
+             </li>
+             <li class="list-group-item text-right">
+                 <span class="pull-left"><strong class=""translate>USER_LAST_NAME</strong></span>
+                 <span id="user-lastname" contenteditable="true">{{user.lastname}}</span>
+             </li>
+             <li class="list-group-item text-right" ><span class="pull-left">
+                 <strong class="pull-left"translate>USER_ACCT_NUMBER</strong></span>
+                 <span id="user-acctnumber" contenteditable="true">{{user.acctnumber}}</span>
+             </li>
+             <li class="list-group-item text-right" ><span class="pull-left">
+                 <strong class="pull-left" translate>USER_IFSC</strong></span>
+                 <span id="user-ifsc" contenteditable="true">{{user.ifsc}}</span>
+             </li>
+             <li class="list-group-item text-right" ><span class="pull-left">
+                 <strong class="pull-left" translate>USER_EMAIL</strong></span>
+                 <span id="user-email" contenteditable="true">{{user.email}}</span>
+             </li>
+             <li class="list-group-item text-right" ><span class="pull-left">
+                 <strong class="pull-left" translate>USER_LOCATION</strong></span>
+                 <span id="user-location" contenteditable="true">{{user.location}}</span>
+             </li>
+         </ul>    
+         <button type="button" class="btn btn-info" ng-click="updateUser()" translate>PROJ_APPLY_CHANGES</button>
+</div>
 
 <form ng-submit="getDist()">
     <input type="text" ng-model="username" placeholder="location" autofocus>
@@ -13,12 +35,11 @@
     <div> {{dist}} </div>
 </form>
 
-
-
 <div id="google_translate_element"></div>
 <script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-}
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
