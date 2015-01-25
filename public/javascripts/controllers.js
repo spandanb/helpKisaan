@@ -229,7 +229,7 @@ function($scope, $http, $rootScope, $location, $translate, $state){
     }
 
     $scope.updateUser = function(){
-        var properties= ["ifsc", "acctnumber", "email", "firstname", "lastname", "location"];
+        var properties= ["ifsc", "acctnumber", "firstname", "lastname", "location"];
         var updates = {};
         for(var i=0; i<properties.length; i++){
             var newValue = document.getElementById("user-" + properties[i]).innerText;
