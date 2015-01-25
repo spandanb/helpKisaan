@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var googleTransliterate = require('google-transliterate');
 
 mongoose.connect('mongodb://localhost/projects');
 require('./models/Users');
@@ -35,7 +36,7 @@ app.use(flash());
 var initPassport = require('./passport/init');
 initPassport(passport);
 
-var routes = require('./routes/index')(passport);
+var routes = require('./routes/index')(passport, googleTransliterate);
 var users = require('./routes/users');
 
 // view engine setup

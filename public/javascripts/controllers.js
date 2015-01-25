@@ -36,9 +36,136 @@ function($scope, projects, $rootScope, $translate){
 'project',
 '$translate',
 '$window',
-function($scope, $rootScope, projects, project, $translate, $window){
+'$http',
+function($scope, $rootScope, projects, project, $translate, $window, $http){
+    //Utility method that encodes object as URI
+    var encodeParams = function(obj) {
+        var url = "";
+        for(var i=0, keys=Object.keys(obj); i<keys.length; i++){
+            if (i > 0) {
+                url += "&";
+            }
+            url += keys[i] + "=" + obj[keys[i]];
+        }
+        return url;
+    }
+    
+    //Return url to google translate API, object 
+    var createTranslateURL = function(source, target, texts){
+        if (!texts || texts.length < 1) {return;}
+        var base = "https://www.googleapis.com/language/translate/v2?";
+        var params  = {};
+        params["key"] =  "AIzaSyDjc6ZctgLju0LyWXQCH9yiEPHg2ehk_RY";
+        params["source"] = source;
+        params["target"] = target;
+        params["callback"] = "JSON_CALLBACK"; 
+        
+        var url = base + encodeParams(params);
+        for (var i=0; i<texts.length; i++) {
+            url += "&q=" + encodeURI(texts[i]); 
+        }
+        return url;
+    }
+    
+    
+    
     $scope.project = project;
-    console.log($scope.project);    
+    
+    console.log($scope.project);
+    //console.log($rootScope.lang)
+    
+    /*
+    var base = "https://www.googleapis.com/language/translate/v2?";
+    var params  = {"key": "AIzaSyDjc6ZctgLju0LyWXQCH9yiEPHg2ehk_RY",
+                "source": "en",
+                "target": "hi",
+                "callback":"JSON_CALLBACK"
+    }
+    params["q"] = encodeURI("Hello World");
+    */
+    
+    
+    //var url = base + encode(params)
+    
+    //Watch
+    $rootScope.$watch(
+        // This function returns the value being watched. It is called for each turn of the $digest loop
+        function() { return $rootScope.lang },
+        
+        // This is the change listener, called when the value returned from the above function changes
+        function(newLang, oldLang) {
+            if (newLang !== "en") {
+                translate();
+            }
+        }
+      
+    );
+ 
+    //User should have a default lang- which would be the default lang of the project 
+ 
+    if ($rootScope.lang !== "en") {
+        translate();    
+    }
+    
+    var translate = function(){
+        //return;
+        var url = createTranslateURL("en", $rootScope.lang, [$scope.project.name, $scope.project.description, $scope.project.owner.location])
+        //Uses API Quota
+        $http.jsonp(url)
+            .success(function(res){
+                var name = res.data.translations[0].translatedText;
+                var description = res.data.translations[1].translatedText;
+                var location = res.data.translations[2].translatedText;
+                
+                //console.log(name, description, location);
+                //console.log($scope.project.name, $scope.project.description, $scope.project.owner.location);
+                
+                //Map of properties to be transliterated
+                var transMap = {}; 
+                
+                if (name.toLowerCase() !== $scope.project.name.toLowerCase()) {
+                    $scope.project.name = name;
+                }else{
+                    transMap["name"] = name;
+                }
+                
+                if (description.toLowerCase() !== $scope.project.description.toLowerCase()) {
+                    $scope.project.description = description;
+                }else{
+                    transMap["description"] = description;
+                }
+                
+                if (location.toLowerCase() !== $scope.project.owner.location.toLowerCase()) {
+                    $scope.project.owner.location = location;
+                }else{
+                    transMap["location"] = location;
+                }
+                if(Object.keys(transMap).length > 0){
+                    var params = {"q": transMap, "src": "en", "dest":"hi"}
+                    $http.post('/transliterate', params).success(function(res){
+                        //console.log(res);
+                        if(res.hasOwnProperty("name")){
+                            $scope.project.name = res.name;    
+                        }
+                        if(res.hasOwnProperty("description")){
+                            $scope.project.description = res.description;    
+                        }
+                        if(res.hasOwnProperty("location")){
+                            $scope.project.owner.location = res.location;    
+                        }
+                        
+                        
+                        
+                    }).error(function(res){})    
+                }
+                
+                 
+            }).error(function(res){
+                console.log("Error: Translation API");
+            });    
+        
+    }
+    
     $scope.deleteProject = function(){
         projects.delete($scope.project._id);
     };
@@ -211,6 +338,9 @@ function($scope, $rootScope, auth, user, $translate){
         auth.signout();
     };
    
+    //Set Default Value
+    $rootScope.lang = $translate.use();
+    //Handle dynamic lang change
     $scope.changelang = function (lang) {
         //console.log("Changing to lang: " + lang);
         $translate.use(lang);

@@ -57,7 +57,7 @@ function($http, $location, $state){
     
     //Gets all projects    
     p.getAll = function() {
-        return $http.get('/projects').success(function(data){
+        return $http.get('/projects', {"lang":"hi"}).success(function(data){
           angular.copy(data, p.projects);
         });
     };

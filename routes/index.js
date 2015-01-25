@@ -55,7 +55,7 @@ var isAdmin = function(user){
   return user.acctnumber === "12345";
 }
 
-module.exports = function(passport){
+module.exports = function(passport, googleTransliterate){
     
     //For debugging, matches all routes, outputs
     //  verb, route, and params 
@@ -211,7 +211,44 @@ module.exports = function(passport){
     });
     
     
-    //Direction Matrix
+    router.post('/transliterate', function(req, res){
+        console.log("In here");
+        var src = req.body.src;
+        var dest = req.body.dest;
+        //var texts = req.body.q;        
+        var texts = function(obj){            
+            var keys = Object.keys(req.body.q);
+            var values = [];
+            for(var i=0; i<keys.length; i++){
+                values.push(obj[keys[i]]);
+            }
+            return values;
+        }(req.body.q);
+        
+        //console.log(req.body)
+        //res.json(req.body);
+        //googleTransliterate.transliterate(["foobar", "world", "cat man"], "en", "hi", function(err, transliteration){
+            //for(transliteration);
+        //})
+        //res.send(200);
+        
+        var keys = Object.keys(req.body.q);
+        
+        googleTransliterate.transliterate(texts, src, dest, function(err, transliteration){
+            //console.log(transliteration);
+            var response = {};
+            for(var i=0; i<transliteration.length; i++){
+                response[keys[i]] = transliteration[i]["hws"][0];
+            }
+            //res.json(transliteration);
+            console.log(response);
+            res.json(response);
+        });
+        //console.log("foo");
+        //res.send(200);
+    });
+    
+    //Direction Matrix API
     router.get('/directions', function(req, res){
         var https = require('https');
         var options = {
@@ -237,6 +274,6 @@ module.exports = function(passport){
             })
         });
     });
-    
+        
     return router;
 }
