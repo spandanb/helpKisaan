@@ -1,20 +1,11 @@
 'use strict';
 
-angular.module('siaControllers', ['pascalprecht.translate'])
-.config(['$translateProvider', function ($translateProvider) {
-    $translateProvider.useStaticFilesLoader({
-        prefix: "locale/locale-",
-        suffix: ".json"
-    });
-
-    $translateProvider.preferredLanguage('en');
-}])
+angular.module('fooControllers', ['pascalprecht.translate'])
 .controller('MainCtrl', [
 '$scope',
 'projects',
 '$rootScope',
-'$translate',
-function($scope, projects, $rootScope, $translate){
+function($scope, projects, $rootScope){
     
     $scope.projects = projects.projects;
     $scope.addProject = function(){

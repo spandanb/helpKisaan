@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('sia', ['ui.router',
-                       'ngResource',
                        'siaFactories',
                        'siaControllers'])
 .config([
