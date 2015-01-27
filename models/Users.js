@@ -7,6 +7,7 @@ module.exports = mongoose.model('User',{
     location: String,
     ifsc: String, //IFSC (Indian Financial System Code) of the beneficiary Bank/Branch
     acctnumber: String, //Full account number of the beneficiary
-	password: String,	
-	email: String,
+    password: String,	
+    email: String,
+    language: String, //Language of user
 });

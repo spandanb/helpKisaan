@@ -1,30 +1,35 @@
  <div class="col-sm-5">
          <ul class="list-group">
-             <li class="list-group-item text-muted" translate>PROJ_INFO</li>
-             <li class="list-group-item text-right">
+            <li class="list-group-item text-muted" translate>PROJ_INFO</li>
+            <li class="list-group-item text-right">
                  <span class="pull-left"><strong class="" translate>USER_FIRST_NAME</strong></span>
                  <span id="user-firstname" contenteditable="true">{{user.firstname}}</span>
-             </li>
-             <li class="list-group-item text-right">
+            </li>
+            <li class="list-group-item text-right">
                  <span class="pull-left"><strong class=""translate>USER_LAST_NAME</strong></span>
                  <span id="user-lastname" contenteditable="true">{{user.lastname}}</span>
-             </li>
-             <li class="list-group-item text-right" ><span class="pull-left">
+            </li>
+            <li class="list-group-item text-right" ><span class="pull-left">
                  <strong class="pull-left"translate>USER_ACCT_NUMBER</strong></span>
                  <span id="user-acctnumber" contenteditable="true">{{user.acctnumber}}</span>
-             </li>
-             <li class="list-group-item text-right" ><span class="pull-left">
+            </li>
+            <li class="list-group-item text-right" ><span class="pull-left">
                  <strong class="pull-left" translate>USER_IFSC</strong></span>
                  <span id="user-ifsc" contenteditable="true">{{user.ifsc}}</span>
-             </li>
-             <!--li class="list-group-item text-right" ><span class="pull-left">
+            </li>
+            <!--li class="list-group-item text-right" ><span class="pull-left">
                  <strong class="pull-left" translate>USER_EMAIL</strong></span>
                  <span id="user-email" contenteditable="true">{{user.email}}</span>
-             </li-->
-             <li class="list-group-item text-right" ><span class="pull-left">
+            </li-->
+            <li class="list-group-item text-right" ><span class="pull-left">
                  <strong class="pull-left" translate>USER_LOCATION</strong></span>
                  <span id="user-location" contenteditable="true">{{user.location}}</span>
-             </li>
+            </li>
+            <li class="list-group-item text-right" ><span class="pull-left">
+                 <strong class="pull-left" translate>USER_LANGUAGE</strong></span>
+                 <span id="user-language" contenteditable="true">{{user.langauge}}</span>
+            </li>
+            
          </ul>    
          <button type="button" class="btn btn-info" ng-click="updateUser()" translate>PROJ_APPLY_CHANGES</button>
 </div>

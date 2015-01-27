@@ -35,6 +35,7 @@
     "USER_APPLY_CHANGES": "परिवर्तन लागू करें",
     "USER_REGISTER" : "नया खाता",
     "USER_SIGN_IN" : "साइन इन",
+    "USER_LANGUAGE": "भाषा",
     
     "MAIN_HERO_MSG" : "किसानों की मदद करें",
     "MAIN_HERO_SUBTEXT" : "हेल्पकिसान दाताओं, उधारदाताओं और उधारकर्ताओं के नेटवर्क का एक नेटवर्क है।",

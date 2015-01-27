@@ -18,8 +18,9 @@
             </li-->            
         </ul>
         <ul class="nav navbar-nav navbar-right">  
-            <li><a href="" ng-click=changelang("en")>English</a></li>
-            <li><a href="" ng-click=changelang("hi")>हिंदी</a></li>
+            <li><a href="" value="english" ng-click=changelang("en")>English</a></li>
+            <li><a href="" value="hindi" ng-click=changelang("hi")>हिंदी</a></li>
+          
             <li><a href="{{(!!$root.user && $root.user!=='0')?'#/new_project':'#/signin'}}" translate>NAV_NEW_PROJ</a></li>
             <li ng-hide={{$root.user}}><a href="#/register" translate>NAV_REGISTER</a></li>
             <li ng-hide={{$root.user}}><a href="#/signin" translate>NAV_SIGN_IN</a></li>

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('siaControllers', ['pascalprecht.translate'])
+angular.module('siaControllers', ['pascalprecht.translate', 'ui.bootstrap'])
 .config(['$translateProvider', function ($translateProvider) {
     $translateProvider.useStaticFilesLoader({
         prefix: "locale/locale-",
@@ -50,7 +50,7 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
         return url;
     }
     
-    //Return url to google translate API, object 
+    //Utility method that creates url to google translate API
     var createTranslateURL = function(source, target, texts){
         if (!texts || texts.length < 1) {return;}
         var base = "https://www.googleapis.com/language/translate/v2?";
@@ -66,53 +66,28 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
         }
         return url;
     }
-    
-    
-    
-    $scope.project = project;
-    
-    console.log($scope.project);
-    //console.log($rootScope.lang)
-    
-    /*
-    var base = "https://www.googleapis.com/language/translate/v2?";
-    var params  = {"key": "AIzaSyDjc6ZctgLju0LyWXQCH9yiEPHg2ehk_RY",
-                "source": "en",
-                "target": "hi",
-                "callback":"JSON_CALLBACK"
-    }
-    params["q"] = encodeURI("Hello World");
-    */
-    
-    
-    //var url = base + encode(params)
-    
-    //Watch
-    $rootScope.$watch(
-        // This function returns the value being watched. It is called for each turn of the $digest loop
-        function() { return $rootScope.lang },
-        
-        // This is the change listener, called when the value returned from the above function changes
-        function(newLang, oldLang) {
-            if (newLang !== "en") {
-                translate();
-            }
-        }
-      
-    );
- 
-    //User should have a default lang- which would be the default lang of the project 
- 
-    if ($rootScope.lang !== "en") {
-        translate();    
-    }
-    
+
+    //Translate the project
     var translate = function(){
-        //return;
-        var url = createTranslateURL("en", $rootScope.lang, [$scope.project.name, $scope.project.description, $scope.project.owner.location])
+        console.log("In translate");
+        return;
+    
+        //Check if a translation for this project exists
+        //console.log($scope.translations);
+        if ($rootScope.lang in $rootScope.translations) {
+            angular.copy($rootScope.translations[$rootScope.lang], $scope.project);
+            console.log("Returning cached translation");
+            return;
+        }
+        
+        console.log("Creating new translation");
+        var url = createTranslateURL($scope.project.owner.language, $rootScope.lang,
+                                     [$scope.project.name, $scope.project.description, $scope.project.owner.location]);
         //Uses API Quota
         $http.jsonp(url)
             .success(function(res){
+                //console.log("res is: ");
+                //console.log(res);
                 var name = res.data.translations[0].translatedText;
                 var description = res.data.translations[1].translatedText;
                 var location = res.data.translations[2].translatedText;
@@ -134,12 +109,13 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
                 }else{
                     transMap["description"] = description;
                 }
-                
+                /*
                 if (location.toLowerCase() !== $scope.project.owner.location.toLowerCase()) {
                     $scope.project.owner.location = location;
                 }else{
                     transMap["location"] = location;
                 }
+                */
                 if(Object.keys(transMap).length > 0){
                     var params = {"q": transMap, "src": "en", "dest":"hi"}
                     $http.post('/transliterate', params).success(function(res){
@@ -150,21 +126,53 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
                         if(res.hasOwnProperty("description")){
                             $scope.project.description = res.description;    
                         }
+                        /*
                         if(res.hasOwnProperty("location")){
                             $scope.project.owner.location = res.location;    
-                        }
-                        
-                        
-                        
+                        }*/
                     }).error(function(res){})    
                 }
+                var translation= {};
+                //Save the translation
+                angular.copy($scope.project, translation);
+                $rootScope.translations[$rootScope.lang] = translation;
+                //console.log("BAR translation is");
+                //console.log($scope.translations);
                 
-                 
             }).error(function(res){
                 console.log("Error: Translation API");
-            });    
-        
+            });       
     }
+    
+    //Init    
+    $scope.project = project;
+    var projectOrig = {}; //Original project object
+    angular.copy($scope.project, projectOrig);
+    
+    $rootScope.translations = {}; //Map of lang to translation 
+    $rootScope.translations[$scope.project.owner.language]=projectOrig;
+    
+    
+    console.log($scope.project);
+    //console.log($scope.project.owner.language);
+    //console.log($rootScope.lang)
+    
+    //Watch for lang change
+    $rootScope.$watch(
+        // This function returns the value being watched. It is called for each turn of the $digest loop
+        function() { return $rootScope.lang },        
+        // This is the change listener, called when the value returned from the above function changes
+        function(newLang, oldLang) {
+            translate();    
+        }      
+    );
+ 
+    //User lang is the lang of the project  
+    if ($rootScope.lang !== $scope.project.owner.language) {
+        translate();    
+    }
+    
+
     
     $scope.deleteProject = function(){
         projects.delete($scope.project._id);
@@ -248,9 +256,10 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
 '$location',
 '$translate',
 '$state',
-function($scope, $http, $rootScope, $location, $translate, $state){
-    
+function($scope, $http, $rootScope, $location, $translate, $state){     
     $scope.register = function(){
+        //console.log($scope.lang);
+        //return;
         $http.post('/signup', {
                 'password': $scope.password,
                 'email': $scope.email,
@@ -259,6 +268,7 @@ function($scope, $http, $rootScope, $location, $translate, $state){
                 'username': $scope.acctnumber,
                 'firstname': $scope.firstname,
                 'lastname': $scope.lastname,
+                'language': $scope.lang
             }).success(function(res){
                 console.log("Successfully registered user");
                 $rootScope.user = res;
