@@ -76,11 +76,11 @@ module.exports = function(passport, googleTransliterate){
     
     /*Get all projects*/
     router.get('/projects', function(req, res, next) {
-      Project.find(function(err, projects){
-        if(err){ return next(err); }
-    
-        res.json(projects);
-      });
+        
+        Project.find().populate('owner').exec(function(err, projects){
+            if(err){ return next(err); }
+            res.json(projects);
+        });
     });
     
     
@@ -88,8 +88,7 @@ module.exports = function(passport, googleTransliterate){
     router.post('/projects', requireAuth, function(req, res, next) {
       var project = new Project(req.body);  
       project.save(function(err, project){
-        if(err){ return next(err); }
-    
+        if(err){ return next(err); }    
         res.json(project);
       });
     });
@@ -97,7 +96,8 @@ module.exports = function(passport, googleTransliterate){
     /*Preload a project*/
     router.param('project', function(req, res, next, id) {
       var query = Project.findById(id);
-      query.exec(function (err, project){
+      query.populate('owner')
+            .exec(function (err, project){
         if (err) { return next(err); }
         if (!project) { return next(new Error("can't find project")); }
     
@@ -109,24 +109,13 @@ module.exports = function(passport, googleTransliterate){
     /*Get a single project*/
     router.get('/projects/:project', function(req, res, next) {
         var project = req.project.toJSON(); 
-        
-        //Attach user object to project
-        var query = User.findById(req.project.owner);
-        query.exec(function (err, user){
-            if (err || !user) { 
-                //If no user or error, send project
-                return res.json(project); 
-            }
-            project.owner = user.toJSON();
-            //Else, send project with owner
-            res.json(project);      
-        });        
-        //res.json(project);
+        res.json(project);
     });
     
     
     /*Update a project*/
-    router.put('/projects/:project', canModify, function(req, res, next){    
+    //FIX: Put can't be a protected route since any translation triggers an update
+    router.put('/projects/:project', function(req, res, next){    
         //Updates the properties
         for(var property in req.body){
             req.project[property] = req.body[property]     
@@ -212,11 +201,13 @@ module.exports = function(passport, googleTransliterate){
     
     
     router.post('/transliterate', function(req, res){
-        console.log("In here");
+        //console.log("In here");
         var src = req.body.src;
         var dest = req.body.dest;
         //var texts = req.body.q;        
-        var texts = function(obj){            
+        //Takes a property-value map, e.g. {"location":"Toronto"}
+	//	and returns an array of the values
+	var texts = function(obj){            
             var keys = Object.keys(req.body.q);
             var values = [];
             for(var i=0; i<keys.length; i++){
@@ -225,7 +216,11 @@ module.exports = function(passport, googleTransliterate){
             return values;
         }(req.body.q);
         
+	//console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         //console.log(req.body)
+	//console.log(texts);
+	//console.log(src)
+	//console.log(dest)
         //res.json(req.body);
         //googleTransliterate.transliterate(["foobar", "world", "cat man"], "en", "hi", function(err, transliteration){
             //for(transliteration);
@@ -234,15 +229,22 @@ module.exports = function(passport, googleTransliterate){
         
         var keys = Object.keys(req.body.q);
         
+	
         googleTransliterate.transliterate(texts, src, dest, function(err, transliteration){
-            //console.log(transliteration);
+            console.log(transliteration);
             var response = {};
-            for(var i=0; i<transliteration.length; i++){
+	    if (!transliteration) {
+		res.send(500).end();
+		return;
+	    }
+		
+	    for(var i=0; i<transliteration.length; i++){
                 response[keys[i]] = transliteration[i]["hws"][0];
             }
             //res.json(transliteration);
             console.log(response);
-            res.json(response);
+            //response is a map of key->transliteration
+	    res.json(response);
         });
         //console.log("foo");
         //res.send(200);
