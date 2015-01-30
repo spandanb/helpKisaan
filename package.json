@@ -23,6 +23,7 @@
     "express-session": "~1.9.3",
     "install": "~0.1.8",
     "npm": "~2.3.0",
-    "google-transliterate": "~0.1.0"
+    "google-transliterate": "~0.1.0",
+    "googlemaps": "~0.1.20"
   }
 }

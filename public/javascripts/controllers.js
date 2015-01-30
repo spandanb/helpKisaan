@@ -105,6 +105,13 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
     
     $scope.project = project;    
     
+    $http.get('/googleAPI/' +project._id).success(function(data){
+                    console.log('Google API is returningData');
+                    console.log(data);
+                    $scope.imageURL = data;
+    });    
+    
+    
     if (!!$scope.project["name" + $rootScope.lang]) {
                     $scope.project.name = $scope.project["name" + $rootScope.lang];
                     $scope.project.description = $scope.project["description" + $rootScope.lang];

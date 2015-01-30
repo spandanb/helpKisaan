@@ -5,7 +5,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Project = mongoose.model('Project');
-
+var googleMaps = require('googlemaps');
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -236,6 +236,28 @@ module.exports = function(passport, googleTransliterate){
         });
         //console.log("foo");
         //res.send(200);
+    });
+    
+    
+    router.get('/googleAPI/:projectId', function(req,res){
+        console.log('GOOGLE API being called;');
+        console.log(req.params.projectId);
+        Project.findOne({_id:req.params.projectId}, function(err,project){
+            var markers = [
+                { 'location': project.location + ', ' + project.city + ', ' +project.state +', India' }
+            ];		
+            var styles = [
+                { 'feature': 'road', 'element': 'all', 'rules': 
+                    { 'hue': '0x00ff00' }
+                }
+            ];
+            var centre = project.city + ', ' +project.state +', India'; 
+            console.log(markers);
+            console.log(centre);
+            var imageURL = googleMaps.staticMap(centre,10, '400x400',false, false, 'roadmap', markers, styles, false);
+            //util.puts(imageURL);
+            res.send(imageURL);
+        });		
     });
     
     //Direction Matrix API
