@@ -62,17 +62,15 @@
                     <input type="text" ng-model=amount class="form-control"  tabindex="2">
                 </div>
 
-             <p translate>PROJ_SELECT_BANK</p> 
-                <div class="radio">
-                  <label><input type="radio" ng-model="bank" value="hdfc">HDFC</label>
+                <div>
+                    <select ng-model=bank class="form-control">
+                        <option value="" selected translate>PROJ_SELECT_BANK</option>
+                        <option value="hdfc">HDFC</option>
+                        <option value="union">Union Bank</option>
+                        <option value="icici">ICICI</option>
+                    </select>
                 </div>
-                <div class="radio">
-                  <label><input type="radio" ng-model="bank" value="union">Union Bank</label>
-                </div>
-                <div class="radio">
-                  <label><input type="radio" ng-model="bank" value="icici">ICICI</label>
-                </div>
-
+                
                 <input type="submit" value="{{'PROJ_DONATE' | translate }}" class="btn btn-success ">
             </form>
            

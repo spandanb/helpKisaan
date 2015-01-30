@@ -178,8 +178,8 @@ function($http, $location, $state, $rootScope){
         var url = p.createTranslateURL(srclang, destlang,
                                      [project[nameS], project[descS]]);
         
-        //console.log(url);
-        //return;
+        console.log("Translate API Blocked");
+        return;
        
         //Uses API Quota
         $http.jsonp(url)

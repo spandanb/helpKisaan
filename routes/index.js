@@ -201,7 +201,6 @@ module.exports = function(passport, googleTransliterate){
     
     
     router.post('/transliterate', function(req, res){
-        //console.log("In here");
         var src = req.body.src;
         var dest = req.body.dest;
         //var texts = req.body.q;        
@@ -215,18 +214,7 @@ module.exports = function(passport, googleTransliterate){
             }
             return values;
         }(req.body.q);
-        
-	//console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        //console.log(req.body)
-	//console.log(texts);
-	//console.log(src)
-	//console.log(dest)
-        //res.json(req.body);
-        //googleTransliterate.transliterate(["foobar", "world", "cat man"], "en", "hi", function(err, transliteration){
-            //for(transliteration);
-        //})
-        //res.send(200);
-        
+                
         var keys = Object.keys(req.body.q);
         
 	

@@ -19,7 +19,13 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">  
             <li><a href="" value="english" ng-click=changelang("en")>English</a></li>
-            <li><a href="" value="hindi" ng-click=changelang("hi")>हिंदी</a></li>
+            <li><a href="" value="hindi"   ng-click=changelang("hi")>हिंदी</a></li>
+            <li><a href="" value="bengali" ng-click=changelang("bn")>বাঙালি</a></li>
+            <li><a href="" value="gujrati" ng-click=changelang("gu")>ગુજરાતી</a></li>
+            <li><a href="" value="kannada" ng-click=changelang("kn")>ಕನ್ನಡ</a></li>
+            <li><a href="" value="tamil"   ng-click=changelang("ta")>தமிழ்</a></li>
+            <li><a href="" value="telugu"  ng-click=changelang("te")>తెలుగు</a></li>
+            <li><a href="" value="urdu"    ng-click=changelang("ur")>اردو</a></li>
           
             <li><a href="{{(!!$root.user && $root.user!=='0')?'#/new_project':'#/signin'}}" translate>NAV_NEW_PROJ</a></li>
             <li ng-hide={{$root.user}}><a href="#/register" translate>NAV_REGISTER</a></li>
