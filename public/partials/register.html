@@ -17,7 +17,7 @@
         <div class="account-wall-2">
 
 
-        <form name=form role="form" ng-submit="register()" novalidate>
+        <form name=form role="form" ng-submit="form.$valid() && register()" novalidate>
             <h3 translate>USER_REGISTER</h3>
             
             <div class="alert alert-danger" ng-show="form.firstname.$dirty && form.firstname.$invalid">
@@ -27,10 +27,12 @@
                 <span ng-show="form.lastname.$error.required">Last Name is required.</span>
             </div>
            <div class="alert alert-danger" ng-show="form.acctnumber.$dirty && form.acctnumber.$invalid">
-                <span ng-show="form.acctnumber.$error.required">Account Number is required.</span>
+                <span ng-show="form.acctnumber.$error.required && !form.acctnumber.$error.number">Account Number is required.</span>
+                <span ng-show="form.acctnumber.$error.number">Enter a numeric Account Number.</span>
             </div>
             <div class="alert alert-danger" ng-show="form.ifsc.$dirty && form.ifsc.$invalid">
-                <span ng-show="form.ifsc.$error.required">IFSC is required.</span>
+                <span ng-show="form.ifsc.$error.required && !form.ifsc.$error.number">IFSC is required.</span>
+                <span ng-show="form.ifsc.$error.number">IFSC must be a numeric code.</span>
             </div>
             <div class="alert alert-danger" ng-show="form.password.$dirty && form.password.$invalid">
                 <span ng-show="form.password.$error.required">Password is required.</span>
@@ -40,6 +42,9 @@
             </div>
             <div class="alert alert-danger" ng-show="form.location.$dirty && form.location.$invalid">
                 <span ng-show="form.location.$error.required">Location is required.</span>
+            </div>
+            <div class="alert alert-danger" ng-show="form.$invalid">
+                <span ng-show="form.$invalid">Cannot Submit Invalid Form.</span>
             </div>
 
             <hr class="colorgraph">
@@ -58,7 +63,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-6">
                    <div class="form-group">
-                        <input type="text" ng-model=acctnumber class="form-control" placeholder="{{'USER_ACCT_NUMBER' | translate}}" tabindex="3" name="acctnumber" required>
+                        <input type="number" ng-model=acctnumber class="form-control" placeholder="{{'USER_ACCT_NUMBER' | translate}}" tabindex="3" name="acctnumber" required>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6">

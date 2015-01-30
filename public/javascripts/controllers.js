@@ -27,6 +27,28 @@ function($scope, projects, $rootScope, $translate){
         }        
     }
     
+    angular.element(document.getElementById('browseBtn')).on('change',function(e){
+                                       console.log('The browse is working properly');
+              var file=e.target.files[0];
+
+             // angular.element(document.getElementById('browseBtn')).val('');
+
+              var fileReader=new FileReader();
+
+              fileReader.onload=function(event){
+                 // $rootScope.$broadcast('event:file:selected',{image:event.target.result,sender:USER.name})
+                
+           $rootScope.imageData=event.target.result;
+            $rootScope.imageName = file.name;
+                  console.log(event.target.result);
+              };
+
+              fileReader.readAsDataURL(file);
+             
+     });
+
+    
+    
     //Watch for lang change
     $rootScope.$watch(
         // This function returns the value being watched. It is called for each turn of the $digest loop
@@ -56,6 +78,14 @@ function($scope, projects, $rootScope, $translate){
         }
         params["name" + $rootScope.lang] = $scope.name;
         params["description" + $rootScope.lang] = $scope.description;
+           
+        params["imageData"] = $rootScope.imageData;
+        params["imageName"]= $rootScope.imageName;
+        params["location"]= $scope.street;
+        params["city"]= $scope.city;
+        params["state"] = $scope.state;
+        
+        
         projects.create(params); 
         
         $scope.owner = null;

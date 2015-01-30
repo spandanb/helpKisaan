@@ -21,6 +21,13 @@ var ProjectSchema = new mongoose.Schema({
     goal: {type: Number, default: 0},
     funds: {type: Number, default: 0}, //Funds received so far    
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    
+    location: String,
+    city:String,
+    state:String,
+    imageURL:String,
+    imageName:String, 
+    imageData:String
 });
 
 mongoose.model('Project', ProjectSchema);
