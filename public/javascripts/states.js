@@ -192,7 +192,23 @@ function($stateProvider, $urlRouterProvider){
             }            
         }
     })
-    ;
+    .state('searchProject',{
+        url:'/searchProject',
+        views:{
+            "main":{
+                templateUrl:'/partials/searchProject.html',
+            },
+            "header":{
+                templateUrl:'/partials/navbar.html',
+                controller:'searchProjectCtrl',
+                resolve: {
+                    user: ['auth', function(auth){
+                        return auth.getUser();
+                    }]
+                },
+            }            
+        }
+    });
     
     $urlRouterProvider.otherwise('home');
 }])

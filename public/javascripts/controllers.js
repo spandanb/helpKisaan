@@ -319,7 +319,9 @@ function($scope, $http, $rootScope, $location, $translate){
 'auth',
 'user',
 '$translate',
-function($scope, $rootScope, auth, user, $translate){
+'$http',
+'$state',
+function($scope, $rootScope, auth, user, $translate, $http, $state){
     //Sets $rootScope.user if user still logged in 
     $rootScope.user = user;    
     
@@ -335,6 +337,31 @@ function($scope, $rootScope, auth, user, $translate){
         $translate.use(lang);
         $rootScope.lang = lang;
     };
+    $scope.searchState = function(){
+            console.log($scope.state);
+            $rootScope.sarchString = $scope.state;
+      $http.post('/searchState',{state:$scope.state}).success(function(data){
+                    console.log('State project is being returned');
+                    $rootScope.allProjects = data;
+                    console.log($rootScope.allProjects);
+                    $state.go('searchProject');
+            }); 
+    };
     
-}])
+    
+}]).controller('searchProjectCtrl', function($scope,$rootScope,$http){
+	
+//	$scope.projects = [];
+	
+//console.log($rootScope.allProjects);
+//$scope.projects.push($rootScope.allProjects);
+$scope.projects = $rootScope.allProjects;
+console.log($scope.projects);
+    $http.post('/searchOtherState',{state:$rootScope.sarchString}).success(function(data){
+			console.log('Other Projects are being returned');
+			$scope.otherProjects = data;
+			console.log($rootScope.allProjects);
+			//$state.go('searchProject');
+    });
+})
 ;

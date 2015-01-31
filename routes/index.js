@@ -210,6 +210,25 @@ module.exports = function(passport, googleTransliterate){
             res.redirect('/');
     });
     
+router.post('/searchState', function(req, res) {
+       	console.log(req.body);
+          	Project.find({state:req.body.state}, function(err,project){
+          		if(err) res.json(500,err);
+          		
+          		res.send(project);
+          	});
+
+    });
+   router.post('/searchOtherState', function(req, res) {
+       	console.log(req.body);
+          	Project.find({state:{$ne:req.body.state}}).limit(6).exec(function(err,project){
+          		if(err) res.json(500,err);
+          		
+          		res.send(project);
+          	});
+
+    });   
+    
     
     router.post('/transliterate', function(req, res){
         var src = req.body.src;
