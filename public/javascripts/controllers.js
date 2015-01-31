@@ -222,12 +222,10 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
 '$rootScope',
 '$location',
 '$translate',
-'$state',
-function($scope, $http, $rootScope, $location, $translate, $state){     
+function($scope, $http, $rootScope, $location, $translate){     
     console.log($rootScope.user);
-    $scope.register = function(){
-        //console.log($scope.lang);
-        //return;
+    $scope.regClicked = false;
+    $scope.register = function(form){
         $http.post('/signup', {
                 'password': $scope.password,
                 'email': $scope.email,
@@ -238,17 +236,30 @@ function($scope, $http, $rootScope, $location, $translate, $state){
                 'lastname': $scope.lastname,
                 'language': $scope.lang
             }).success(function(res){
-                console.log("Successfully registered user");
-                $rootScope.user = res;
-                //Redirect
-                $location.path('/profile');
-                
+                console.log(res);
+                if (res.code && res.code === 2000) {
+                    console.log(res.msg);
+                    $scope.errorMsg = res.msg;
+                    return;
+                }
+                else{
+                    console.log("Successfully registered user");
+                    $rootScope.user = res;
+                    $scope.user = res;
+                    //Redirect
+                    $location.path('/profile');    
+                }                
             }).error(function(res){
                 console.log("Error: Unable to register user");
                 console.log(res);
-                $scope.error = "Error: Unable to register user";
+                $scope.errorMsg = "Error: Unable to register user";
             });
     }
+    
+    $scope.clicked =  function(){
+        $scope.regClicked = true; //form register button clicked 
+    }
+    
     
     $scope.signin = function(){
         $http.post('/login', {

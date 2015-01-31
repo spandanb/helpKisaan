@@ -17,7 +17,7 @@
         <div class="account-wall-2">
 
 
-        <form name=form role="form" ng-submit="form.$valid() && register()" novalidate>
+        <form name=form role="form" ng-submit="form.$valid && register()" novalidate>
             <h3 translate>USER_REGISTER</h3>
             
             <div class="alert alert-danger" ng-show="form.firstname.$dirty && form.firstname.$invalid">
@@ -38,13 +38,14 @@
                 <span ng-show="form.password.$error.required">Password is required.</span>
             </div>
             <div class="alert alert-danger" ng-show="form.conf-password.$dirty && form.conf-password.$invalid">
-                <span ng-show="form.conf-password.$error.required">Password Confirmation is required.</span>
+                <span ng-show="form.conf-password.$error.required">Password confirmation is required.</span>
             </div>
             <div class="alert alert-danger" ng-show="form.location.$dirty && form.location.$invalid">
                 <span ng-show="form.location.$error.required">Location is required.</span>
             </div>
-            <div class="alert alert-danger" ng-show="form.$invalid">
-                <span ng-show="form.$invalid">Cannot Submit Invalid Form.</span>
+            <div class="alert alert-danger" ng-show="regClicked">
+                <span ng-show="form.$invalid && regClicked">Cannot submit invalid form.</span>
+                <span ng-show>{{errorMsg}}</span>
             </div>
 
             <hr class="colorgraph">
@@ -111,7 +112,7 @@
             
             <hr class="colorgraph">
             <div class="row">
-                    <div class="col-xs-12 col-md-6"><input type="submit" value="{{'USER_REGISTER' | translate}}" class="btn btn-primary btn-block btn-lg" tabindex="8"></div>
+                    <div class="col-xs-12 col-md-6"><input type="submit" ng-click="clicked()" value="{{'USER_REGISTER' | translate}}" class="btn btn-primary btn-block btn-lg" tabindex="8"></div>
                     <div class="col-xs-12 col-md-6"><a href="#" class="btn btn-success btn-block btn-lg" translate>USER_SIGN_IN</a></div>
             </div>
         </form>

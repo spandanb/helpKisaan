@@ -77,9 +77,9 @@ module.exports = function(passport, googleTransliterate){
     /*Get all projects*/
     router.get('/projects', function(req, res, next) {
         
-        Project.find().populate('owner').exec(function(err, projects){
-            if(err){ return next(err); }
-            res.json(projects);
+        Project.find().exec(function(err, projects){
+                if(err){ return next(err); }
+                res.json(projects);
         });
     });
     
@@ -170,10 +170,21 @@ module.exports = function(passport, googleTransliterate){
      ***********************************************/
            
     //Register
-    router.post('/signup', passport.authenticate('signup'), function(req,res){
-            res.send(req.user); 
-        } 
-    );
+    router.post('/signup', function(req,res, next){
+        passport.authenticate('signup', function(err, user, info){
+            if(err){
+                //console.log(typeof(err));
+                if(err && typeof(err) === "number" && err === 2000){
+                    return res.send({"code": 2000, "msg":"Account number already registered" });
+                }
+            }
+            if(!user){
+                return res.send({"code":2001, "msg": "User account not found"});
+            }
+	        return res.send(user);
+            //res.status(200).end(); 
+        })(req, res, next);
+    });
     
     //Checks if logged in
     //TODO: what if user intercepts incoming responses and modifies them
