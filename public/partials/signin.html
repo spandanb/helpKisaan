@@ -12,19 +12,28 @@
             <div class="account-wall-2">
 
                 <h3 translate>USER_SIGN_IN</h3>
+            
+                <div class="alert alert-danger" ng-show="form.acctnumber.$dirty && form.acctnumber.$invalid">
+                    <span ng-show="form.acctnumber.$error.required">Account Number is required.</span>
+                </div>
+                <div class="alert alert-danger" ng-show="form.password.$dirty && form.password.$invalid">
+                    <span ng-show="form.password.$error.required">Password is required.</span>
+                </div>
+
                 <hr class="colorgraph">
-                
-                <form role="form" ng-submit="signin()">
+            
+                <form role="form" name="form" novalidate ng-submit="signin()">
                     <div class="form-group col-xs-12 col-sm-6 col-md-12">
-                        <input type="text" ng-model=acctnumber class="form-control" placeholder="{{'USER_ACCT_NUMBER' | translate}}" tabindex="1">
+                        <input type="text" ng-model=acctnumber name=acctnumber class="form-control" placeholder="{{'USER_ACCT_NUMBER' | translate}}" tabindex="1" required>
                     </div>
                     <div class="form-group col-xs-12 col-sm-6 col-md-12">
-                        <input type="password" ng-model=password class="form-control" placeholder="{{'USER_PASSWORD' | translate}}" tabindex="2">
+                        <input type="password" ng-model=password name=password class="form-control" placeholder="{{'USER_PASSWORD' | translate}}" tabindex="2" required>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-md-12">
                                 <hr class="colorgraph">
                                 <input type="submit" value="{{'USER_SIGN_IN' | translate}}" class="btn btn-success btn-block btn-lg">
+                                <a class="btn btn-info btn-block btn-lg" href="#/register" translate>USER_REGISTER </a>
                         </div>
                     </div>
                 </form>

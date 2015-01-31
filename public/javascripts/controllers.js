@@ -222,7 +222,8 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
 '$rootScope',
 '$location',
 '$translate',
-function($scope, $http, $rootScope, $location, $translate){     
+'$state',
+function($scope, $http, $rootScope, $location, $translate, $state){     
     console.log($rootScope.user);
     $scope.regClicked = false;
     $scope.register = function(form){
@@ -266,8 +267,19 @@ function($scope, $http, $rootScope, $location, $translate){
                 'username': $scope.acctnumber,
                 'password': $scope.password
             }).success(function(res){
+                if (res.code >= 2000) {
+                    if (res.code === 2100) {
+                        $scope.errorMsg = "User account not found.";
+                    }
+                    else if (res.code(2101)) {
+                        $scope.errorMsg = "Incorrect password";
+                    }
+                    return;
+                }
+                console.log(res);
                 console.log("Successfully signed in");                
-                $rootScope.user = res;
+                $rootScope.user = res;                
+                $scope.user = res;
                 $location.path('/profile');
                 
             }).error(function(res){
@@ -281,6 +293,7 @@ function($scope, $http, $rootScope, $location, $translate){
         $http.get('/signout').success(function(){
             console.log("Succesfully signed out!");
             $rootScope.user = null;
+            $state.reload();
         });
     };
     

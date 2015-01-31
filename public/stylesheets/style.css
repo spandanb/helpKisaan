@@ -2,7 +2,7 @@ body {
   /*padding-right: 50px;
   padding-left: 50px;*/
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  /*background-color: #8BA870;*/
+  /*background-color: #CCFFCC;*/
 }
 
 a {
@@ -12,6 +12,10 @@ a {
 .right{
     position: absolute;
     right: 150px;
+}
+
+.navbar{
+  background-color: #e8ffe8;  
 }
 
 

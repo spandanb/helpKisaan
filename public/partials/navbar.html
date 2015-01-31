@@ -4,7 +4,7 @@
       <a class="navbar-brand" href="#/" translate>NAV_HELPKISAAN</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav navbar">
             <li><a href="#/"translate>NAV_HOME</a></li>
             <li><a href="#about" translate>NAV_ABOUT</a></li>
             <li><a href="#/projects" translate>NAV_PROJECTS</a></li>
@@ -29,7 +29,7 @@
             <li><a href="" value="urdu"    ng-click=changelang("ur")>اردو</a></li>
           
             <li><a href="{{(!!$root.user && $root.user!=='0')?'#/new_project':'#/signin'}}" translate>NAV_NEW_PROJ</a></li>
-            <li ng-hide={{$root.user}}><a href="#/register" translate>NAV_REGISTER</a></li>
+            <!--li ng-hide={{$root.user}}><a href="#/register" translate>NAV_REGISTER</a></li-->
             <li ng-hide={{$root.user}}><a href="#/signin" translate>NAV_SIGN_IN</a></li>
             <li ng-show={{$root.user}} ng-click="signout()" ><a href="#" translate>NAV_LOG_OUT</a></li>
         </ul>

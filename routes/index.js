@@ -168,13 +168,15 @@ module.exports = function(passport, googleTransliterate){
     /***********************************************
      *****************PASSPORT**********************
      ***********************************************/
-           
+           	   
     //Register
+    router.post('/signup', passport.authenticate('signup') );
+    
+    /*
     router.post('/signup', function(req,res, next){
         passport.authenticate('signup', function(err, user, info){
             if(err){
-                //console.log(typeof(err));
-                if(err && typeof(err) === "number" && err === 2000){
+                if(typeof(err) === "number" && err === 2000){
                     return res.send({"code": 2000, "msg":"Account number already registered" });
                 }
             }
@@ -185,7 +187,8 @@ module.exports = function(passport, googleTransliterate){
             //res.status(200).end(); 
         })(req, res, next);
     });
-    
+    */
+
     //Checks if logged in
     //TODO: what if user intercepts incoming responses and modifies them
     router.get('/loggedin', function(req, res) {
@@ -200,10 +203,36 @@ module.exports = function(passport, googleTransliterate){
     
     //Login
     router.post('/login', passport.authenticate('login'), function(req, res) {
-        console.log("In POST /login");
-        res.send(req.user);
+         console.log("In POST /login");
+         res.send(req.user);
     }); 
+                               
+
+
+/* 
+    router.post('/login', function(req, res) {
+        console.log("In POST /login");
+	passport.authenticate('login', function(err, user, info){
+	    console.log("FOOO");
+	    if (err) {
+		if(err === 2100){
+			return res.send({"code":2100, "msg": "User account not found"});
+		}
+		if(err === 2101){
+			return res.send({"code":2101, "msg": "Incorrect password"});
+		}
+	    }
+          if(!user){
+                return res.send({"code":2001, "msg": "User account not found"});
+		}
+	    
+	res.send(user);
+	
+	})(req, res);
         
+    }); 
+    */
+
     //Logout 
     router.get('/signout', function(req, res) {
             req.logout();
