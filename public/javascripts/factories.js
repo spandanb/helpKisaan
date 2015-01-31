@@ -178,8 +178,8 @@ function($http, $location, $state, $rootScope){
         var url = p.createTranslateURL(srclang, destlang,
                                      [project[nameS], project[descS]]);
         
-        console.log("Translate API Blocked");
-        return;
+        //console.log("Translate API Blocked");
+        //return;
        
         //Uses API Quota
         $http.jsonp(url)
@@ -223,6 +223,7 @@ function($http, $location, $state, $rootScope){
                         
                         if (Object.keys(proj).length > 0) {
                             //Update DB
+                            console.log("Updating project");
                             p.update(project._id, proj);                           
                             //Update projectsMap
                             p.projectsMap[project._id][nameD] = proj[nameD];
@@ -240,6 +241,7 @@ function($http, $location, $state, $rootScope){
                 }else{ //Nothing to transliterate
                         if (Object.keys(proj).length > 0) {
                             //Update DB
+                            console.log("Updating project");
                             p.update(project._id, proj);                    
                             //Update projectsMap
                             p.projectsMap[project._id][nameD] = proj[nameD];

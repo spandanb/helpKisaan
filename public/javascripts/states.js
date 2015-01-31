@@ -197,10 +197,11 @@ function($stateProvider, $urlRouterProvider){
         views:{
             "main":{
                 templateUrl:'/partials/searchProject.html',
+                controller:'MainCtrl',
             },
             "header":{
                 templateUrl:'/partials/navbar.html',
-                controller:'searchProjectCtrl',
+                controller:'HeaderCtrl',
                 resolve: {
                     user: ['auth', function(auth){
                         return auth.getUser();

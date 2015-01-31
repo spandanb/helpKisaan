@@ -14,7 +14,10 @@ angular.module('siaControllers', ['pascalprecht.translate', 'ui.bootstrap'])
 'projects',
 '$rootScope',
 '$translate',
-function($scope, projects, $rootScope, $translate){
+'$http',
+'$state',
+'$location',
+function($scope, projects, $rootScope, $translate, $http, $state, $location){
     
     $scope.projects = projects.projects;
     
@@ -27,24 +30,17 @@ function($scope, projects, $rootScope, $translate){
         }        
     }
     
+    //Image u
     angular.element(document.getElementById('browseBtn')).on('change',function(e){
-                                       console.log('The browse is working properly');
-              var file=e.target.files[0];
-
-             // angular.element(document.getElementById('browseBtn')).val('');
-
-              var fileReader=new FileReader();
-
-              fileReader.onload=function(event){
-                 // $rootScope.$broadcast('event:file:selected',{image:event.target.result,sender:USER.name})
-                
-           $rootScope.imageData=event.target.result;
+        console.log('The browse is working properly');
+        var file=e.target.files[0];
+        var fileReader=new FileReader();
+        fileReader.onload=function(event){    
+            $rootScope.imageData=event.target.result;
             $rootScope.imageName = file.name;
-                  console.log(event.target.result);
-              };
-
-              fileReader.readAsDataURL(file);
-             
+            console.log(event.target.result);
+        };
+        fileReader.readAsDataURL(file);     
      });
 
     
@@ -90,8 +86,33 @@ function($scope, projects, $rootScope, $translate){
         
         $scope.owner = null;
         $scope.name = null;
-        $scope.goal = null;
+        $scope.goal = null;  
     }
+    
+    $scope.searchState = function(){
+        console.log($scope.state);
+        $rootScope.sarchString = $scope.state;
+        $http.post('/searchState',{state:$scope.state}).success(function(data){
+                console.log('State projects is being returned!');
+                //$scope.projects = data;
+                //console.log(data);
+                $rootScope.stateProjects = data;
+                //console.log($rootScope.allProjects);
+                //$state.go('searchProject');
+                    
+                $http.post('/searchOtherState',{state:$rootScope.sarchString}).success(function(data){
+			$scope.stateProjects = $rootScope.stateProjects;
+                        console.log('Other Projects are being returned');
+			$scope.otherProjects = data;
+			console.log(data)
+                        //console.log($rootScope.allProjects);
+			//$state.go('searchProject');
+                        $location.path('/searchProject');    
+                    });
+                
+        }); 
+    };
+    
 }])
 .controller('ProjectsCtrl', [
 '$scope',
@@ -350,26 +371,24 @@ function($scope, $rootScope, auth, user, $translate, $http, $state){
         $translate.use(lang);
         $rootScope.lang = lang;
     };
+
+    
     $scope.searchState = function(){
-            console.log($scope.state);
-            $rootScope.sarchString = $scope.state;
-      $http.post('/searchState',{state:$scope.state}).success(function(data){
-                    console.log('State project is being returned');
-                    $rootScope.allProjects = data;
-                    console.log($rootScope.allProjects);
-                    $state.go('searchProject');
-            }); 
+        console.log($scope.state);
+        $rootScope.sarchString = $scope.state;
+        $http.post('/searchState',{state:$scope.state}).success(function(data){
+                console.log('State project is being returned');
+                $rootScope.allProjects = data;
+                console.log($rootScope.allProjects);
+                $state.go('searchProject');
+        }); 
     };
     
     
 }]).controller('searchProjectCtrl', function($scope,$rootScope,$http){
 	
-//	$scope.projects = [];
-	
-//console.log($rootScope.allProjects);
-//$scope.projects.push($rootScope.allProjects);
-$scope.projects = $rootScope.allProjects;
-console.log($scope.projects);
+    $scope.projects = $rootScope.allProjects;
+    console.log($scope.projects);
     $http.post('/searchOtherState',{state:$rootScope.sarchString}).success(function(data){
 			console.log('Other Projects are being returned');
 			$scope.otherProjects = data;

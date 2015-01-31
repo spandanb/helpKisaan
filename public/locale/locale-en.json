@@ -50,5 +50,9 @@
     "ABOUT_6": "HelpKisaan encourages collaboration and co-operation between farmers by exempting 50% of loans if the money is used to help the initiatives of fellow farmers.",
     "ABOUT_7": "Loan is primarily paid back in the form of a percent of the produce above a certain threshold, below which the farmer keeps.",
     "ABOUT_8": "People can donate/lend to farmers in geographical proximity, so they can directly pick up the produce.",
-    "ABOUT_9": "This will allow people to directly see how their money is being used."
+    "ABOUT_9": "This will allow people to directly see how their money is being used.",
+    
+    "USER_CITY": "City",
+    "USER_STATE": "State"
+    
 }

@@ -313,7 +313,7 @@ router.post('/searchState', function(req, res) {
             var centre = project.city + ', ' +project.state +', India'; 
             console.log(markers);
             console.log(centre);
-            var imageURL = googleMaps.staticMap(centre,10, '400x400',false, false, 'roadmap', markers, styles, false);
+            var imageURL = googleMaps.staticMap(centre,10, '600x400',false, false, 'roadmap', markers, styles, false);
             //util.puts(imageURL);
             res.send(imageURL);
         });		
