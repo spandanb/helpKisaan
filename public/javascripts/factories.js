@@ -78,6 +78,7 @@ function($http, $location, $state, $rootScope){
             p.projectsMap[data._id] = data;
             //console.log(p.projects);
             //console.log(p.projectsMap);
+            $location.path('/projects/' + data._id);
         });
     };
     //Get a single project

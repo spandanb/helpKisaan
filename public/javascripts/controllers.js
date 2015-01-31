@@ -65,6 +65,7 @@ function($scope, projects, $rootScope, $translate, $http, $state, $location){
         }      
     );
     
+    //See whether project is loan based or donation based
     $scope.loanSelect = function(value){
         if(value ==="loan"){
             $scope.isLoan = true;
@@ -89,7 +90,6 @@ function($scope, projects, $rootScope, $translate, $http, $state, $location){
         params["location"]= $scope.street;
         params["city"]= $scope.city;
         params["state"] = $scope.state;
-        
         
         projects.create(params); 
         
