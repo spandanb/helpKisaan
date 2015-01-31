@@ -65,6 +65,15 @@ function($scope, projects, $rootScope, $translate, $http, $state, $location){
         }      
     );
     
+    $scope.loanSelect = function(value){
+        if(value ==="loan"){
+            $scope.isLoan = true;
+        }
+        else{
+            $scope.isLoan = false;
+        }
+        
+    }
     
     //console.log($scope.projects);
     $scope.addProject = function(){
@@ -139,7 +148,6 @@ function($scope, $rootScope, projects, project, $translate, $window, $http){
     }else{
         projects.getTranslation($scope.project,$scope.project.owner.language, $rootScope.lang);    
     }
-    
     
     //projects.getTranslation($scope.project, $scope.project.owner.language, $rootScope.lang);
            

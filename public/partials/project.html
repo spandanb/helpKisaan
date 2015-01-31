@@ -34,7 +34,7 @@
         <div class="col-sm-7" contenteditable="false" style="">
             <div class="panel panel-default">
                 <img ng-show="{{!project.imageData}}" data-src="holder.js/100%x200" alt="100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxkZWZzLz48cmVjdCB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjkyLjQ2MDkzNzUiIHk9IjEwMCIgc3R5bGU9ImZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMXB0O2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjI0MngyMDA8L3RleHQ+PC9nPjwvc3ZnPg==" data-holder-rendered="true" style="height: 400px; width: 100%; display: block;">
-                <img ng-show="{{!!project.imageData}}" height="400px" width="400px" ng-src="{{project.imageData}}"/>
+                <img ng-show="{{!!project.imageData}}" class="img-responsive" alt="Responsive image" height="400px" width="400px" ng-src="{{project.imageData}}"/>
             </div>
 
            <div class="panel panel-default">
@@ -74,9 +74,15 @@
                 
                 <input type="submit" value="{{'PROJ_DONATE' | translate }}" class="btn btn-success ">
             </form>
-           
+            <!-- Info Panel -->
             <ul class="list-group">
                 <li class="list-group-item text-muted" contenteditable="false" translate>PROJ_INFO</li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="" translate>USER_ACCT_NUMBER</strong></span>{{project.owner.acctnumber}}
+                </li>
+                <li class="list-group-item text-right">
+                    <span class="pull-left"><strong class="" translate>USER_IFSC</strong></span>{{project.owner.ifsc}}
+                </li>
                 <li class="list-group-item text-right">
                     <span class="pull-left"><strong class="" translate>PROJ_FUNDS_RAISED</strong></span>₹{{project.funds}}
                 </li>
@@ -87,20 +93,22 @@
                     <span class="pull-left"><strong class="" translate>PROJ_PROGRESS</strong></span>{{progress}}%
                 </li>
                 <li class="list-group-item text-right">
-                    <span class="pull-left"><strong class="" translate>USER_LOCATION</strong></span>{{project.owner.location}}
+                    <span class="pull-left"><strong class="" translate>USER_LOCATION</strong></span>{{project.location}}
                 </li>
                 <li class="list-group-item text-right">
-                    <span class="pull-left"><strong class="" translate>USER_ACCT_NUMBER</strong></span>{{project.owner.acctnumber}}
+                    <span class="pull-left"><strong class="" translate>USER_CITY</strong></span>{{project.city}}
                 </li>
                 <li class="list-group-item text-right">
-                    <span class="pull-left"><strong class="" translate>USER_IFSC</strong></span>{{project.owner.ifsc}}
+                    <span class="pull-left"><strong class="" translate>USER_STATE</strong></span>{{project.state}}
                 </li>
+                
             </ul>    
             
+            <h4 translate>USER_LOCATION</h4> <br>
             <div ng-modal ="imageURL">
-		<img ng-src="{{imageURL}}" height="400" width="400"/>           
+                <img ng-src="{{imageURL}}" class="img-responsive" id ="mapImg" alt="Responsive image"/>           
             </div>
-            
+            <br>     
             <!-- Admin Panel -->
             <div ng-show=isEditable()>
                 <ul class="list-group">
@@ -117,6 +125,20 @@
                         <strong class=""translate>PROJ_DESCRIPTION</strong></span>
                         <span id="admin-description" contenteditable="true">{{project.description||"Unspecified"}}
                     </li>
+                    <li class="list-group-item text-right" ><span class="pull-left">
+                        <strong class=""translate>USER_LOCATION</strong></span>
+                        <span id="admin-description" contenteditable="true">{{project.location||"Unspecified"}}
+                    </li>
+                    <li class="list-group-item text-right" ><span class="pull-left">
+                        <strong class=""translate>USER_CITY</strong></span>
+                        <span id="admin-description" contenteditable="true">{{project.city||"Unspecified"}}
+                    </li>
+                    <li class="list-group-item text-right" ><span class="pull-left">
+                        <strong class=""translate>USER_STATE</strong></span>
+                        <span id="admin-description" contenteditable="true">{{project.state||"Unspecified"}}
+                    </li>
+                    
+                    
                 </ul>    
                 <!--input type="submit" value="Apply Changes" class="btn btn-info"-->
                 <button type="button" class="btn btn-info" ng-click="updateValue()" translate>PROJ_APPLY_CHANGES</button>

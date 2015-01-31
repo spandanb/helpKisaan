@@ -40,15 +40,27 @@
                         <input type="text" ng-model="street" class="form-control" placeholder="House No. and Street Name" tabindex="4">
                     </div>
                     <div class="form-group col-xs-12 col-sm-6 col-md-12">
-                        <input type="text" ng-model="city" class="form-control" placeholder="Town/Village" tabindex="5">
+                        <input type="text" ng-model="city" class="form-control" placeholder="{{'USER_CITY'|translate}}" tabindex="5">
                     </div>
                     <div class="form-group col-xs-12 col-sm-6 col-md-12">
-                        <input type="text" ng-model="state" class="form-control" placeholder="State" tabindex="6">
+                        <input type="text" ng-model="state" class="form-control" placeholder="{{'USER_STATE'|translate}}" tabindex="6">
+                    </div>
+                    
+                    <div class="form-group col-xs-12 col-sm-6 col-md-12">
+                        <div class="radio">
+                            <label><input type="radio" ng-model="loantype" value="loan" ng-change="loanSelect('loan')">Loan Project</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" ng-model="loantype" value="donation" ng-change="loanSelect('donation')">Donation Project</label>
+                        </div>
+                    </div>
+                    <div ng-show='isLoan' class="form-group col-xs-12 col-sm-6 col-md-12">
+                        <input type="text" ng-model="interestRate" class="form-control" placeholder="Interest Rate %" tabindex="6">
                     </div>
                     
                     
                     <div class="content padding">
-                        <input type="file" id="browseBtn" accept="image/*"/>
+                        <input type="file" id="browseBtn" accept="image/*">
                     </div>
                     <br>
                     
